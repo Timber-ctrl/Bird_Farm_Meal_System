@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Models.Authentications;
+using Domain.Models.Views;
 
 namespace Domain.Mappings
 {
@@ -15,9 +16,11 @@ namespace Domain.Mappings
 
             // Staff
             CreateMap<Staff, AuthModel>();
+            CreateMap<Staff, StaffViewModel>();
 
             // Manager
             CreateMap<Manager, AuthModel>();
+            CreateMap<Manager, ManagerViewModel>();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Infrastructure.Configurations
                 var user = await authService.GetUser(id);
 
                 // Push the user into context
-                context.Items["User"] = user;
+                context.Items["USER"] = user;
             }
             catch
             {

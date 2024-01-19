@@ -14,6 +14,9 @@ namespace Infrastructure.Configurations
         public static void AddDependenceInjection(this IServiceCollection services)
         {
             services.AddScoped<IHangfireService, HangfireService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IStaffService, StaffService>();
+            services.AddScoped<IManagerService, ManagerService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
