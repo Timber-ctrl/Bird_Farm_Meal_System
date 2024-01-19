@@ -1,6 +1,8 @@
-﻿using Application.Services.Interfaces;
+﻿using Application.Services.Implementations;
+using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
+using Domain.Models.Authentications;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +27,20 @@ namespace Presentation.Controllers
             {
                 var auth = this.GetAuthenticatedUser();
                 return await _managerService.GetManagerInformation(auth.Id);
+            }
+            catch (Exception e)
+            {
+                return e.Message.InternalServerError();
+            }
+        }
+
+        [HttpPost]
+        [Route("registrations")]
+        public async Task<IActionResult> RegisterManager([FromBody] ManagerRegistrationModel model)
+        {
+            try
+            {
+                return await _managerService.CreateManager(model);
             }
             catch (Exception e)
             {
