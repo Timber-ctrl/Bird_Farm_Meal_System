@@ -1,7 +1,7 @@
+using Application.Mappings;
 using Application.Services.Interfaces;
 using Application.Settings;
 using Domain.Entities;
-using Domain.Mappings;
 using Hangfire;
 using Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;

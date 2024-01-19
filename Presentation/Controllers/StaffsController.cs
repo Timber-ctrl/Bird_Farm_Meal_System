@@ -2,6 +2,7 @@
 using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
+using Domain.Models.Authentications;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,20 @@ namespace Presentation.Controllers
             {
                 var auth = this.GetAuthenticatedUser();
                 return await _staffService.GetStaffInformation(auth.Id);
+            }
+            catch (Exception e)
+            {
+                return e.Message.InternalServerError();
+            }
+        }
+
+        [HttpPost]
+        [Route("registrations")]
+        public async Task<IActionResult> RegisterStaff([FromBody] StaffRegistrationModel model)
+        {
+            try
+            {
+                return await _staffService.CreateStaff(model);
             }
             catch (Exception e)
             {
