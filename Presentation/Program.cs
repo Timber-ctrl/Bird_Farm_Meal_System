@@ -75,6 +75,8 @@ using (var serviceScope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 
+app.UseJwt();
+
 app.UseAuthorization();
 
 app.MapControllers();

@@ -17,7 +17,7 @@ namespace Infrastructure.Configurations
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var auth = (AuthModel?)context.HttpContext.Items["User"];
+            var auth = (AuthModel?)context.HttpContext.Items["USER"];
             if (auth == null)
             {
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
