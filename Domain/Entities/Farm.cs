@@ -7,7 +7,7 @@ namespace Domain.Entities
     {
         public Farm()
         {
-            Cages = new HashSet<Cage>();
+            Areas = new HashSet<Area>();
             Staff = new HashSet<Staff>();
         }
 
@@ -20,7 +20,7 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
 
         public virtual Manager Manager { get; set; } = null!;
-        public virtual ICollection<Cage> Cages { get; set; }
+        public virtual ICollection<Area> Areas { get; set; }
         public virtual ICollection<Staff> Staff { get; set; }
     }
 }

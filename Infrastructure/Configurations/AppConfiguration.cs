@@ -14,9 +14,12 @@ namespace Infrastructure.Configurations
         public static void AddDependenceInjection(this IServiceCollection services)
         {
             services.AddScoped<IHangfireService, HangfireService>();
+            services.AddScoped<ICloudStorageService, CloudStorageService>();
+
             services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IStaffService, StaffService>();
+            services.AddScoped<IStaffService, staffService>();
             services.AddScoped<IManagerService, ManagerService>();
+            services.AddScoped<ICageService, CageService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
@@ -68,6 +71,21 @@ namespace Infrastructure.Configurations
         public static void UseJwt(this IApplicationBuilder app)
         {
             app.UseMiddleware<JwtMiddleware>();
+        }
+
+        public static void UseHangfireService(this IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var services = serviceScope.ServiceProvider;
+
+                var hangfireService = services.GetService<IHangfireService>();
+
+                if (hangfireService != null)
+                {
+                    // Task
+                }
+            }
         }
 
     }

@@ -26,7 +26,9 @@ namespace Application.Services.Implementations
             try
             {
                 var manager = await _managerRepository.Where(ma => ma.Id.Equals(id))
+                    //ToList;
                     .FirstOrDefaultAsync();
+
                 return manager != null ? manager : null!;
             }
             catch (Exception)
@@ -42,6 +44,7 @@ namespace Application.Services.Implementations
                 var manager = await _managerRepository.Where(ma => ma.Id.Equals(id))
                     .ProjectTo<ManagerViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync();
+
                 return manager != null ? manager.Ok() : AppErrors.NOT_FOUND.NotFound();
             }
             catch (Exception)
@@ -68,6 +71,7 @@ namespace Application.Services.Implementations
 
                 // Create new manager
                 var manager = _mapper.Map<Manager>(model);
+
                 _managerRepository.Add(manager);
                 await _unitOfWork.SaveChangesAsync();
 

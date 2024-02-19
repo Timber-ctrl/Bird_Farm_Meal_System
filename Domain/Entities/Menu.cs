@@ -7,19 +7,21 @@ namespace Domain.Entities
     {
         public Menu()
         {
-            MenuItems = new HashSet<MenuItem>();
-            PlanMenus = new HashSet<PlanMenu>();
+            MenuMeals = new HashSet<MenuMeal>();
+            PlanCustomMenus = new HashSet<PlanCustomMenu>();
+            Plans = new HashSet<Plan>();
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
         public Guid SpeciesId { get; set; }
-        public Guid StageId { get; set; }
+        public Guid CareModeId { get; set; }
         public DateTime CreateAt { get; set; }
 
+        public virtual CareMode CareMode { get; set; } = null!;
         public virtual Species Species { get; set; } = null!;
-        public virtual Stage Stage { get; set; } = null!;
-        public virtual ICollection<MenuItem> MenuItems { get; set; }
-        public virtual ICollection<PlanMenu> PlanMenus { get; set; }
+        public virtual ICollection<MenuMeal> MenuMeals { get; set; }
+        public virtual ICollection<PlanCustomMenu> PlanCustomMenus { get; set; }
+        public virtual ICollection<Plan> Plans { get; set; }
     }
 }

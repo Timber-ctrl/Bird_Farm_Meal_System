@@ -15,17 +15,29 @@ namespace Data
             _context = context;
         }
 
-        public IStaffRepository _staff = null!;
+        public IStaffRepository _Staff = null!;
         public IManagerRepository _manager = null!;
+        public ICageRepository _cage = null!;
+        public IBirdRepository _bird = null!;
 
         public IStaffRepository Staff
         {
-            get { return _staff ??= new StaffRepository(_context); }
+            get { return _Staff ??= new StaffRepository(_context); }
         }
 
         public IManagerRepository Manager
         {
             get { return _manager ??= new ManagerRepository(_context); }
+        }
+
+        public ICageRepository Cage
+        {
+            get { return _cage ??= new CageRepository(_context); }
+        }
+
+        public IBirdRepository Bird
+        {
+            get { return _bird ??= new BirdRepository(_context); }
         }
 
         public void BeginTransaction()

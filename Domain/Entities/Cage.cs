@@ -8,7 +8,9 @@ namespace Domain.Entities
         public Cage()
         {
             Birds = new HashSet<Bird>();
+            Plans = new HashSet<Plan>();
             Tasks = new HashSet<Task>();
+            Tickets = new HashSet<Ticket>();
         }
 
         public Guid Id { get; set; }
@@ -19,15 +21,17 @@ namespace Domain.Entities
         public double Width { get; set; }
         public double Depth { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public Guid StageId { get; set; }
+        public Guid CareModeId { get; set; }
         public Guid SpeciesId { get; set; }
-        public Guid FarmId { get; set; }
+        public Guid AreaId { get; set; }
         public DateTime CreateAt { get; set; }
 
-        public virtual Farm Farm { get; set; } = null!;
+        public virtual Area Area { get; set; } = null!;
+        public virtual CareMode CareMode { get; set; } = null!;
         public virtual Species Species { get; set; } = null!;
-        public virtual Stage Stage { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
+        public virtual ICollection<Plan> Plans { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

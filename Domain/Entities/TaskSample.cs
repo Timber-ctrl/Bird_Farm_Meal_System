@@ -7,17 +7,19 @@ namespace Domain.Entities
     {
         public TaskSample()
         {
-            TaskSampleItems = new HashSet<TaskSampleItem>();
+            Repeats = new HashSet<Repeat>();
+            TaskSampleCheckLists = new HashSet<TaskSampleCheckList>();
         }
 
         public Guid Id { get; set; }
         public string ThumbnailUrl { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public Guid StageId { get; set; }
+        public Guid CareModeId { get; set; }
+        public DateTime CreateAt { get; set; }
 
-        public virtual Stage Stage { get; set; } = null!;
-        public virtual Repeat? Repeat { get; set; }
-        public virtual ICollection<TaskSampleItem> TaskSampleItems { get; set; }
+        public virtual CareMode CareMode { get; set; } = null!;
+        public virtual ICollection<Repeat> Repeats { get; set; }
+        public virtual ICollection<TaskSampleCheckList> TaskSampleCheckLists { get; set; }
     }
 }

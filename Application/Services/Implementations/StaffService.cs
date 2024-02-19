@@ -13,21 +13,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Implementations
 {
-    public class StaffService : BaseService, IStaffService
+    public class staffService : BaseService, IStaffService
     {
-        private readonly IStaffRepository _staffRepository;
-        public StaffService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly IStaffRepository _StaffRepository;
+        public staffService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _staffRepository = unitOfWork.Staff;
+            _StaffRepository = unitOfWork.Staff;
         }
 
         private async Task<Staff> GetStaff(Guid id)
         {
             try
             {
-                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
+                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
                     .FirstOrDefaultAsync();
-                return staff != null ? staff : null!;
+                return Staff != null ? Staff : null!;
             }
             catch (Exception)
             {
@@ -39,10 +39,10 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
+                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
                     .ProjectTo<StaffViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync();
-                return staff != null ? staff.Ok() : AppErrors.NOT_FOUND.NotFound();
+                return Staff != null ? Staff.Ok() : AppErrors.NOT_FOUND.NotFound();
             }
             catch (Exception)
             {
@@ -66,13 +66,13 @@ namespace Application.Services.Implementations
                     return AppErrors.DUPLICATE_PHONE.Conflict();
                 }
 
-                // Create new staff
-                var staff = _mapper.Map<Staff>(model);
-                _staffRepository.Add(staff);
+                // Create new Staff
+                var Staff = _mapper.Map<Staff>(model);
+                _StaffRepository.Add(Staff);
                 await _unitOfWork.SaveChangesAsync();
 
-                // Return created staff
-                var createdStaff = await GetStaff(staff.Id);
+                // Return created Staff
+                var createdStaff = await GetStaff(Staff.Id);
                 return _mapper.Map<StaffViewModel>(createdStaff).Created();
             }
             catch (Exception)
@@ -83,12 +83,12 @@ namespace Application.Services.Implementations
 
         private bool IsEmailExists(string email)
         {
-            return _staffRepository.Any(st => st.Email.Equals(email));
+            return _StaffRepository.Any(st => st.Email.Equals(email));
         }
 
         private bool IsPhoneNumberExists(string phone)
         {
-            return _staffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
+            return _StaffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
         }
     }
 }

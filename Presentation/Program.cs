@@ -1,5 +1,4 @@
 using Application.Mappings;
-using Application.Services.Interfaces;
 using Application.Settings;
 using Domain.Entities;
 using Hangfire;
@@ -61,17 +60,7 @@ app.UseSwaggerUI();
 
 app.UseHangfireDashboard("/hangfire");
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-
-    var hangfireService = services.GetRequiredService<IHangfireService>();
-
-    if (hangfireService != null)
-    {
-        // Task
-    }
-}
+app.UseHangfireService();
 
 app.UseHttpsRedirection();
 
