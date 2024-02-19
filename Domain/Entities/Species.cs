@@ -9,15 +9,20 @@ namespace Domain.Entities
         {
             Birds = new HashSet<Bird>();
             Cages = new HashSet<Cage>();
+            MenuSammples = new HashSet<MenuSammple>();
             Menus = new HashSet<Menu>();
         }
 
         public Guid Id { get; set; }
+        public string? ThumbnailUrl { get; set; }
         public string Name { get; set; } = null!;
+        public Guid BirdCategoryId { get; set; }
         public DateTime CreateAt { get; set; }
 
+        public virtual BirdCategory BirdCategory { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<Cage> Cages { get; set; }
+        public virtual ICollection<MenuSammple> MenuSammples { get; set; }
         public virtual ICollection<Menu> Menus { get; set; }
     }
 }

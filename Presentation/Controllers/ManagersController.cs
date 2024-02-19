@@ -13,6 +13,7 @@ namespace Presentation.Controllers
     public class ManagersController : ControllerBase
     {
         private readonly IManagerService _managerService;
+        // DI 
         public ManagersController(IManagerService managerService)
         {
             _managerService = managerService;

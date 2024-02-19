@@ -8,7 +8,8 @@ namespace Domain.Entities
         public UnitOfMeasurement()
         {
             Foods = new HashSet<Food>();
-            MenuItems = new HashSet<MenuItem>();
+            MealItemSamples = new HashSet<MealItemSample>();
+            MealItems = new HashSet<MealItem>();
         }
 
         public Guid Id { get; set; }
@@ -16,6 +17,7 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
 
         public virtual ICollection<Food> Foods { get; set; }
-        public virtual ICollection<MenuItem> MenuItems { get; set; }
+        public virtual ICollection<MealItemSample> MealItemSamples { get; set; }
+        public virtual ICollection<MealItem> MealItems { get; set; }
     }
 }

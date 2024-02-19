@@ -7,14 +7,18 @@ namespace Domain.Entities
     {
         public Plan()
         {
-            PlanMenus = new HashSet<PlanMenu>();
+            PlanCustomMenus = new HashSet<PlanCustomMenu>();
         }
 
         public Guid Id { get; set; }
-        public Guid BirdId { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public Guid MenuId { get; set; }
+        public Guid CageId { get; set; }
         public DateTime CreateAt { get; set; }
 
-        public virtual Bird Bird { get; set; } = null!;
-        public virtual ICollection<PlanMenu> PlanMenus { get; set; }
+        public virtual Cage Cage { get; set; } = null!;
+        public virtual Menu Menu { get; set; } = null!;
+        public virtual ICollection<PlanCustomMenu> PlanCustomMenus { get; set; }
     }
 }

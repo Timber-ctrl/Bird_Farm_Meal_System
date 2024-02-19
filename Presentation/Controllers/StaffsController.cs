@@ -1,10 +1,8 @@
-﻿using Application.Services.Implementations;
-using Application.Services.Interfaces;
+﻿using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
 using Domain.Models.Authentications;
 using Infrastructure.Configurations;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -14,6 +12,7 @@ namespace Presentation.Controllers
     public class StaffsController : ControllerBase
     {
         private readonly IStaffService _staffService;
+
         public StaffsController(IStaffService staffService)
         {
             _staffService = staffService;

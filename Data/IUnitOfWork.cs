@@ -6,7 +6,9 @@ namespace Data
     {
         public IStaffRepository Staff { get; }
         public IManagerRepository Manager { get; }
-
+        public ICageRepository Cage { get; }
+        public IBirdRepository Bird { get; }
+        
         void BeginTransaction();
         void Commit();
         void Rollback();
