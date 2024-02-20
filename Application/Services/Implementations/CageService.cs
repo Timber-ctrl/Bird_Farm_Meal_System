@@ -11,7 +11,6 @@ using Domain.Models.Filters;
 using Domain.Models.Pagination;
 using Domain.Models.Updates;
 using Domain.Models.Views;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +40,7 @@ namespace Application.Services.Implementations
                     .Paginate(pagination)
                     .ProjectTo<CageViewModel>(_mapper.ConfigurationProvider)
                     .ToListAsync();
-                return new ObjectResult(cages.ToPaged(pagination, totalRows));
+                return cages.ToPaged(pagination, totalRows).Ok();
             }
             catch (Exception)
             {
@@ -106,6 +105,10 @@ namespace Application.Services.Implementations
                 if (cage == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
+                }
+                if (model.Thumbnail != null)
+                {
+                    cage.ThumbnailUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Thumbnail);
                 }
                 _mapper.Map(model, cage);
                 _cageRepository.Update(cage);

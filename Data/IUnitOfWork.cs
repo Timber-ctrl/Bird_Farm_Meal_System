@@ -8,6 +8,10 @@ namespace Data
         public IManagerRepository Manager { get; }
         public ICageRepository Cage { get; }
         public IBirdRepository Bird { get; }
+        public IFarmRepository Farm { get; }
+        public IAreaRepository Area { get; }
+        public ICareModeRepository CareMode { get; }
+        public ISpeciesRepository Species { get; }
         
         void BeginTransaction();
         void Commit();
