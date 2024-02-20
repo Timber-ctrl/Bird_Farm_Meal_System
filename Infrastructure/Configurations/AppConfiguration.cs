@@ -20,6 +20,11 @@ namespace Infrastructure.Configurations
             services.AddScoped<IStaffService, staffService>();
             services.AddScoped<IManagerService, ManagerService>();
             services.AddScoped<ICageService, CageService>();
+            services.AddScoped<IBirdService, BirdService>();
+            services.AddScoped<IFarmService, FarmService>();
+            services.AddScoped<ICareModeService, CareModeService>();
+            services.AddScoped<IAreaService, AreaService>();
+            services.AddScoped<ISpeciesService, SpeciesService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }

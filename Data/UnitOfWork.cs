@@ -15,14 +15,18 @@ namespace Data
             _context = context;
         }
 
-        public IStaffRepository _Staff = null!;
+        public IStaffRepository _staff = null!;
         public IManagerRepository _manager = null!;
         public ICageRepository _cage = null!;
         public IBirdRepository _bird = null!;
+        public IFarmRepository _farm = null!;
+        public IAreaRepository _area = null!;
+        public ICareModeRepository _careMode = null!;
+        public ISpeciesRepository _species = null!;
 
         public IStaffRepository Staff
         {
-            get { return _Staff ??= new StaffRepository(_context); }
+            get { return _staff ??= new StaffRepository(_context); }
         }
 
         public IManagerRepository Manager
@@ -38,6 +42,26 @@ namespace Data
         public IBirdRepository Bird
         {
             get { return _bird ??= new BirdRepository(_context); }
+        }
+
+        public IFarmRepository Farm
+        {
+            get { return _farm ??= new FarmRepository(_context); }
+        }
+
+        public ICareModeRepository CareMode
+        {
+            get { return _careMode ??= new CareModeRepository(_context); }
+        }
+
+        public IAreaRepository Area
+        {
+            get { return _area ??= new AreaRepository(_context); }
+        }
+
+        public ISpeciesRepository Species
+        {
+            get { return _species ??= new SpeciesRepository(_context); }
         }
 
         public void BeginTransaction()

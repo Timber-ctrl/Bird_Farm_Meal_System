@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Common.Helpers;
 using Domain.Constants;
 using Domain.Entities;
@@ -35,6 +36,22 @@ namespace Application.Mappings
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => StaffStatuses.Active))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
 
+            // Farm
+            CreateMap<Farm, FarmViewModel>();
+            CreateMap<FarmCreateModel, Farm>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<FarmUpdateModel, Farm>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Bird
+            CreateMap<Bird, BirdViewModel>();
+            CreateMap<BirdCreateModel, Bird>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<BirdUpdateModel, Bird>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             // Cage
             CreateMap<Cage, CageViewModel>();
             CreateMap<CageCreateModel, Cage>()
@@ -45,12 +62,27 @@ namespace Application.Mappings
 
             // Area
             CreateMap<Area, AreaViewModel>();
+            CreateMap<AreaCreateModel, Area>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<AreaUpdateModel, Area>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Species
             CreateMap<Species, SpeciesViewModel>();
+            CreateMap<SpeciesCreateModel, Species>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<SpeciesUpdateModel, Species>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // CareMode
             CreateMap<CareMode, CareModeViewModel>();
+            CreateMap<CareModeCreateModel, CareMode>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<CareModeUpdateModel, CareMode>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
