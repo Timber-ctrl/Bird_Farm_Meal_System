@@ -82,6 +82,10 @@ namespace Application.Services.Implementations
         {
             try
             {
+                if (IsManagerHasFarm(model.ManagerId))
+                {
+                    return AppErrors.MANAGER_HAS_FARM.Conflict();
+                }
                 var farm = _mapper.Map<Farm>(model);
                 if (model.Thumbnail != null)
                 {
@@ -114,6 +118,18 @@ namespace Application.Services.Implementations
                 _farmRepository.Update(farm);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetFarm(farm.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private bool IsManagerHasFarm(Guid id)
+        {
+            try
+            {
+                return _farmRepository.Any(f => f.ManagerId.Equals(id));
             }
             catch (Exception)
             {

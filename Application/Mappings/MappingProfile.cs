@@ -83,6 +83,9 @@ namespace Application.Mappings
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
             CreateMap<CareModeUpdateModel, CareMode>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Unit Of Measurement
+            CreateMap<UnitOfMeasurement, UnitOfMeasurementViewModel>();
         }
     }
 }
