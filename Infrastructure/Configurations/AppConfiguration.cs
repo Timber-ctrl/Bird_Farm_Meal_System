@@ -24,7 +24,8 @@ namespace Infrastructure.Configurations
             services.AddScoped<IFarmService, FarmService>();
             services.AddScoped<ICareModeService, CareModeService>();
             services.AddScoped<IAreaService, AreaService>();
-            services.AddScoped<ISpeciesService, SpeciesService>();
+            services.AddScoped<ISpeciesService, SpeciesService>(); 
+            services.AddScoped<IUnitOfMeasurementService, UnitOfMeasurementService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }

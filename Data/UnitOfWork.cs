@@ -23,6 +23,7 @@ namespace Data
         public IAreaRepository _area = null!;
         public ICareModeRepository _careMode = null!;
         public ISpeciesRepository _species = null!;
+        public IUnitOfMeasurementRepository _unitOfMeasurement = null!;
 
         public IStaffRepository Staff
         {
@@ -62,6 +63,11 @@ namespace Data
         public ISpeciesRepository Species
         {
             get { return _species ??= new SpeciesRepository(_context); }
+        }
+
+        public IUnitOfMeasurementRepository UnitOfMeasurement
+        {
+            get { return _unitOfMeasurement ??= new UnitOfMeasurementRepository(_context); }
         }
 
         public void BeginTransaction()

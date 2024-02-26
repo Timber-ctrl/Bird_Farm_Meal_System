@@ -12,7 +12,8 @@ namespace Data
         public IAreaRepository Area { get; }
         public ICareModeRepository CareMode { get; }
         public ISpeciesRepository Species { get; }
-        
+        public IUnitOfMeasurementRepository UnitOfMeasurement { get; }
+
         void BeginTransaction();
         void Commit();
         void Rollback();
