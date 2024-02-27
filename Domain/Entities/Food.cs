@@ -12,7 +12,7 @@ namespace Domain.Entities
         }
 
         public Guid Id { get; set; }
-        public string AvatarUrl { get; set; } = null!;
+        public string ThumbnailUrl { get; set; } = null!;
         public string Name { get; set; } = null!;
         public Guid FoodCategoryId { get; set; }
         public double Quantity { get; set; }

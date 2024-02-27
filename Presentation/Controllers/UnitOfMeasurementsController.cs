@@ -1,9 +1,7 @@
-﻿using Application.Services.Implementations;
-using Application.Services.Interfaces;
+﻿using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers

@@ -23,6 +23,9 @@ namespace Data
         public IAreaRepository _area = null!;
         public ICareModeRepository _careMode = null!;
         public ISpeciesRepository _species = null!;
+        public IFoodRepository _food = null!;
+        public IFoodCategoryRepository _foodCategory = null!;
+        public IBirdCategoryRepository _birdCategory = null!;
         public IUnitOfMeasurementRepository _unitOfMeasurement = null!;
 
         public IStaffRepository Staff
@@ -63,6 +66,21 @@ namespace Data
         public ISpeciesRepository Species
         {
             get { return _species ??= new SpeciesRepository(_context); }
+        }
+
+        public IFoodRepository Food
+        {
+            get { return _food ??= new FoodRepository(_context); }
+        }
+
+        public IFoodCategoryRepository FoodCategory
+        {
+            get { return _foodCategory ??= new FoodCategoryRepository(_context); }
+        }
+
+        public IBirdCategoryRepository BirdCategory
+        {
+            get { return _birdCategory ??= new BirdCategoryRepository(_context); }
         }
 
         public IUnitOfMeasurementRepository UnitOfMeasurement

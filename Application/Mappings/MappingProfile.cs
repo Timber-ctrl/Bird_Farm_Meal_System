@@ -25,7 +25,7 @@ namespace Application.Mappings
             CreateMap<Staff, StaffViewModel>();
             CreateMap<StaffRegistrationModel, Staff>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => StaffStatuses.Active))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => StaffStatuses.ACTIVE))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
 
             // Manager
@@ -33,7 +33,7 @@ namespace Application.Mappings
             CreateMap<Manager, ManagerViewModel>();
             CreateMap<ManagerRegistrationModel, Manager>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => StaffStatuses.Active))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => StaffStatuses.ACTIVE))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
 
             // Farm
@@ -82,6 +82,23 @@ namespace Application.Mappings
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
             CreateMap<CareModeUpdateModel, CareMode>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Food
+            CreateMap<Food, FoodViewModel>();
+            CreateMap<FoodCreateModel, Food>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => FoodStatuses.AVAILABLE));
+            CreateMap<FoodUpdateModel, Food>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Food Category
+            CreateMap<FoodCategory, FoodCategoryViewModel>();
+            CreateMap<FoodCategoryCreateModel, FoodCategory>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<FoodCategoryUpdateModel, FoodCategory>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Unit Of Measurement

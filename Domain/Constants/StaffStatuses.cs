@@ -8,6 +8,6 @@ namespace Domain.Constants
 {
     public class StaffStatuses
     {
-        public const string Active = "Active";
+        public const string ACTIVE = "Active";
     }
 }

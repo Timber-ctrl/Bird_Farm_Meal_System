@@ -12,6 +12,9 @@ namespace Data
         public IAreaRepository Area { get; }
         public ICareModeRepository CareMode { get; }
         public ISpeciesRepository Species { get; }
+        public IFoodRepository Food { get; }
+        public IFoodCategoryRepository FoodCategory { get; }
+        public IBirdCategoryRepository BirdCategory { get; }
         public IUnitOfMeasurementRepository UnitOfMeasurement { get; }
 
         void BeginTransaction();
