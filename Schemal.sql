@@ -122,7 +122,7 @@ Create Table UnitOfMeasurement (
 Go
 Create Table Food (
 	Id uniqueidentifier primary key,
-	AvatarUrl nvarchar(max) not null,
+	ThumbnailUrl nvarchar(max) not null,
 	Name nvarchar(256) not null,
 	FoodCategoryId uniqueidentifier foreign key references FoodCategory(Id) not null,
 	Quantity float not null,

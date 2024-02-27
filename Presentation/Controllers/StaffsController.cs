@@ -20,7 +20,7 @@ namespace Presentation.Controllers
 
         [HttpGet]
         [Route("informations")]
-        [Authorize(UserRoles.Staff)]
+        [Authorize(UserRoles.STAFF)]
         public async Task<IActionResult> GetStaffInformation()
         {
             try

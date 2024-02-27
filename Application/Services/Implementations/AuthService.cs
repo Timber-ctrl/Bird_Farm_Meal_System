@@ -40,7 +40,7 @@ namespace Application.Services.Implementations
                     var Staff = await _StaffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    Staff!.Role = UserRoles.Staff;
+                    Staff!.Role = UserRoles.STAFF;
                     var accessToken = GenerateJwtToken(Staff);
                     return new TokenModel { AccessToken = accessToken }.Ok();
                 }
@@ -64,7 +64,7 @@ namespace Application.Services.Implementations
                     var manager = await _managerRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    manager!.Role = UserRoles.Manager;
+                    manager!.Role = UserRoles.MANAGER;
                     var accessToken = GenerateJwtToken(manager);
                     return new TokenModel { AccessToken = accessToken }.Ok();
                 }
@@ -89,7 +89,7 @@ namespace Application.Services.Implementations
                         .Where(st => st.Id.Equals(id))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    Staff!.Role = UserRoles.Staff;
+                    Staff!.Role = UserRoles.STAFF;
                     return Staff;
                 }
 
@@ -100,7 +100,7 @@ namespace Application.Services.Implementations
                         .Where(st => st.Id.Equals(id))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    manager!.Role = UserRoles.Manager;
+                    manager!.Role = UserRoles.MANAGER;
                     return manager;
                 }
 
@@ -124,7 +124,7 @@ namespace Application.Services.Implementations
                     new Claim("id", auth.Id.ToString()),
                     new Claim("role", auth.Role.ToString()),
                 }),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
