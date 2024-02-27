@@ -4,7 +4,8 @@ namespace Domain.Models.Updates
 {
     public class CageUpdateModel
     {
-        public string? Material { get; set; } = null!;
+        public string? Name { get; set; }
+        public string? Material { get; set; }
         public string? Description { get; set; }
         public double? Height { get; set; }
         public double? Width { get; set; }

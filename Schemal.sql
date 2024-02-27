@@ -82,6 +82,7 @@ Go
 Create Table Cage (
 	Id uniqueidentifier primary key,
 	Code nvarchar(256) not null,
+	Name nvarchar(256) not null,
 	Material nvarchar(256) not null,
 	Description nvarchar(max),
 	Height float not null,

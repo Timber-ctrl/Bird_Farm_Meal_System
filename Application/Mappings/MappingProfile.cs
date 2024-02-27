@@ -101,6 +101,14 @@ namespace Application.Mappings
             CreateMap<FoodCategoryUpdateModel, FoodCategory>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // Bird Category
+            CreateMap<BirdCategory, BirdCategoryViewModel>();
+            CreateMap<BirdCategoryCreateModel, BirdCategory>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<BirdCategoryUpdateModel, BirdCategory>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             // Unit Of Measurement
             CreateMap<UnitOfMeasurement, UnitOfMeasurementViewModel>();
         }

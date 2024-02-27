@@ -25,9 +25,9 @@ namespace Infrastructure.Configurations
             services.AddScoped<ICareModeService, CareModeService>();
             services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<ISpeciesService, SpeciesService>(); 
-            services.AddScoped<FoodService, FoodService>(); 
-            services.AddScoped<FoodCategoryService, FoodCategoryService>(); 
-            services.AddScoped<BirdCategoryService, BirdCategoryService>(); 
+            services.AddScoped<IFoodService, FoodService>(); 
+            services.AddScoped<IFoodCategoryService, FoodCategoryService>(); 
+            services.AddScoped<IBirdCategoryService, BirdCategoryService>(); 
             services.AddScoped<IUnitOfMeasurementService, UnitOfMeasurementService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
