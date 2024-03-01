@@ -11,6 +11,7 @@
         public string? Code { get; set; }
         public SpeciesViewModel Species { get; set; } = null!;
         public CareModeViewModel CareMode { get; set; } = null!;
+        public BirdCategoryViewModel Category { get; set; } = null!;
         public DateTime CreateAt { get; set; }
     }
 }

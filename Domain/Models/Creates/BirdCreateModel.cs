@@ -13,5 +13,6 @@ namespace Domain.Models.Creates
         public Guid CageId { get; set; }
         public Guid SpeciesId { get; set; }
         public Guid CareModeId { get; set; }
+        public Guid CategoryId { get; set; }
     }
 }
