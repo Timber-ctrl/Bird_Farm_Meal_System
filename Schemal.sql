@@ -105,6 +105,7 @@ Create Table Bird (
 	Code nvarchar(256),
 	CageId uniqueidentifier foreign key references Cage(Id) not null,
 	SpeciesId uniqueidentifier foreign key references Species(Id) not null,
+	CategoryId uniqueidentifier foreign key references BirdCategory(Id) not null,
 	CareModeId uniqueidentifier foreign key references CareMode(Id) not null,
 	CreateAt datetime not null default getdate()
 )
@@ -152,7 +153,6 @@ Create Table MealItemSample (
 	MenuMealSammpleId uniqueidentifier foreign key references MenuMealSample(Id) not null,
 	FoodId  uniqueidentifier foreign key references Food(Id) not null,
 	Quantity float not null,
-	UnitOfMeasurementId uniqueidentifier foreign key references UnitOfMeasurement(Id) not null,
 	[Order] int not null,
 	Primary key (MenuMealSammpleId, FoodId)
 )
@@ -190,15 +190,6 @@ Create Table [Plan] (
 	MenuId uniqueidentifier foreign key references Menu(Id) not null, 
 	CageId uniqueidentifier foreign key references Cage(Id) not null,
 	CreateAt datetime not null default getdate(),
-)
-Go
-Create Table PlanCustomMenu (
-	Name nvarchar(256) not null,
-	ForDay datetime not null,
-	PlanId uniqueidentifier foreign key references [Plan](Id) not null,
-	MenuId uniqueidentifier foreign key references Menu(Id) not null, 
-	CreateAt datetime not null default getdate(),
-	Primary key (PlanId, MenuId)
 )
 Go
 Create Table Task (

@@ -35,6 +35,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Name.Contains(filter.Name));
                 }
+                if (filter.CategoryId != null)
+                {
+                    query = query.Where(cg => cg.CategoryId.Equals(filter.CategoryId));
+                }
                 var totalRows = query.Count();
                 var birds = await query.AsNoTracking()
                     .Paginate(pagination)
