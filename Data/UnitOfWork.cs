@@ -26,7 +26,40 @@ namespace Data
         public IFoodRepository _food = null!;
         public IFoodCategoryRepository _foodCategory = null!;
         public IBirdCategoryRepository _birdCategory = null!;
+        public IAssignStaffRepository _assignStaff = null!;
         public IUnitOfMeasurementRepository _unitOfMeasurement = null!;
+        //Admin
+        public IAdminRepository _admin = null!;
+        //Meal
+        public IMealItemRepository _mealItem = null!;
+        //Meal Sample
+        public IMealItemSampleRepository _mealItemSample = null!;
+        //Menu
+        public IMenuRepository _menu = null!;
+        //Menu Meal
+        public IMenuMealRepository _menuMeal = null!;
+        //Menu Meal Sample
+        public IMenuMealSampleRepository _menuMealSample = null!;
+        //Menu Sample
+        public IMenuSampleRepository _menuSample = null!;
+        //Plan
+        public IPlanRepository _plan = null!;
+        //Repeat
+        public IRepeatRepository _repeat = null!;
+        //Task
+        public ITaskRepository _task = null!;
+        //TaskCheckList
+        public ITaskCheckListRepository _taskCheckList = null!;
+        //TaskCheckListReport
+        public ITaskCheckListReportRepository _taskCheckListReport = null!;
+        //TaskCheckListReportItem
+        public ITaskCheckListReportItemRepository _taskCheckListReportItem = null!;
+        //TaskSample
+        public ITaskSampleRepository _taskSample = null!;
+        //TaskSampleCheckList
+        public ITaskSampleCheckListRepository _taskSampleCheckList = null!;
+        //Ticket
+        public ITicketRepository _ticket = null!;
 
         public IStaffRepository Staff
         {
@@ -62,7 +95,7 @@ namespace Data
         {
             get { return _area ??= new AreaRepository(_context); }
         }
-
+      
         public ISpeciesRepository Species
         {
             get { return _species ??= new SpeciesRepository(_context); }
@@ -83,15 +116,118 @@ namespace Data
             get { return _birdCategory ??= new BirdCategoryRepository(_context); }
         }
 
+        public IAssignStaffRepository AssignStaff
+        {
+            get { return _assignStaff ??= new AssignStaffRepository(_context); }
+        }
+
         public IUnitOfMeasurementRepository UnitOfMeasurement
         {
             get { return _unitOfMeasurement ??= new UnitOfMeasurementRepository(_context); }
         }
 
+        //Admin
+        public IAdminRepository Admin
+        {
+            get { return _admin ??= new AdminRepository(_context); }
+        }
+
+        //MealItem
+        public IMealItemRepository MealItem
+        {
+            get { return _mealItem ??= new MealItemRepository(_context); }
+        }
+
+        //MealItemSample
+        public IMealItemSampleRepository MealItemSample
+        {
+            get { return _mealItemSample ??= new MealItemSampleRepository(_context); }
+        }
+
+        //Menu
+        public IMenuRepository Menu
+        {
+            get { return _menu ??= new MenuRepository(_context); }
+        }
+
+        //Menu Meal
+        public IMenuMealRepository MenuMeal
+        {
+            get { return _menuMeal ??= new MenuMealRepository(_context); }
+        }
+
+        //MenuMealSample
+        public IMenuMealSampleRepository MenuMealSample
+        {
+            get { return _menuMealSample ??= new MenuMealSampleRepository(_context); }
+        }
+
+        //MenuMealSample
+        public IMenuSampleRepository MenuSample
+        {
+            get { return _menuSample ??= new MenuSampleRepository(_context); }
+        }
+
+        //Plan
+        public IPlanRepository Plan
+        {
+            get { return _plan ??= new PlanRepository(_context); }
+        }
+
+        //Repeat
+        public IRepeatRepository Repeat
+        {
+            get { return _repeat ??= new RepeatRepository(_context); }
+        }
+
+        //Task
+        public ITaskRepository Task
+        {
+            get { return _task ??= new TaskRepository(_context); }
+        }
+
+        //TaskCheckList
+        public ITaskCheckListRepository TaskCheckList
+        {
+            get { return _taskCheckList ??= new TaskCheckListRepository(_context); }
+        }
+
+        //TaskCheckListReport
+        public ITaskCheckListReportRepository TaskCheckListReport
+        {
+            get { return _taskCheckListReport ??= new TaskCheckListReportRepository(_context); }
+        }
+
+        //TaskCheckListReportItem
+        public ITaskCheckListReportItemRepository TaskCheckListReportItem
+        {
+            get { return _taskCheckListReportItem ??= new TaskCheckListReportItemRepository(_context); }
+        }
+
+        //TaskSample
+        public ITaskSampleRepository TaskSample
+        {
+            get { return _taskSample ??= new TaskSampleRepository(_context); }
+        }
+
+        //TaskSampleCheckList
+        public ITaskSampleCheckListRepository TaskSampleCheckList
+        {
+            get { return _taskSampleCheckList ??= new TaskSampleCheckListRepository(_context); }
+        }
+        //Ticket
+        public ITicketRepository Ticket
+        {
+            get { return _ticket ??= new TicketRepository(_context); }
+        }
+
+
         public void BeginTransaction()
         {
             _transaction = _context.Database.BeginTransaction();
         }
+
+
 
         public void Commit()
         {

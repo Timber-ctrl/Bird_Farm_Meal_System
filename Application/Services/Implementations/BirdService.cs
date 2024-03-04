@@ -44,6 +44,7 @@ namespace Application.Services.Implementations
                     .Paginate(pagination)
                     .ProjectTo<BirdViewModel>(_mapper.ConfigurationProvider)
                     .ToListAsync();
+
                 return birds.ToPaged(pagination, totalRows).Ok();
             }
             catch (Exception)
