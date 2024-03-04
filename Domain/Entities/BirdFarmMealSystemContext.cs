@@ -17,15 +17,22 @@ namespace Domain.Entities
         }
 
         public virtual DbSet<Admin> Admins { get; set; } = null!;
+        public virtual DbSet<AggregatedCounter> AggregatedCounters { get; set; } = null!;
         public virtual DbSet<Area> Areas { get; set; } = null!;
         public virtual DbSet<AssignStaff> AssignStaffs { get; set; } = null!;
         public virtual DbSet<Bird> Birds { get; set; } = null!;
         public virtual DbSet<BirdCategory> BirdCategories { get; set; } = null!;
         public virtual DbSet<Cage> Cages { get; set; } = null!;
         public virtual DbSet<CareMode> CareModes { get; set; } = null!;
+        public virtual DbSet<Counter> Counters { get; set; } = null!;
         public virtual DbSet<Farm> Farms { get; set; } = null!;
         public virtual DbSet<Food> Foods { get; set; } = null!;
         public virtual DbSet<FoodCategory> FoodCategories { get; set; } = null!;
+        public virtual DbSet<Hash> Hashes { get; set; } = null!;
+        public virtual DbSet<Job> Jobs { get; set; } = null!;
+        public virtual DbSet<JobParameter> JobParameters { get; set; } = null!;
+        public virtual DbSet<JobQueue> JobQueues { get; set; } = null!;
+        public virtual DbSet<List> Lists { get; set; } = null!;
         public virtual DbSet<Manager> Managers { get; set; } = null!;
         public virtual DbSet<MealItem> MealItems { get; set; } = null!;
         public virtual DbSet<MealItemSample> MealItemSamples { get; set; } = null!;
@@ -34,9 +41,12 @@ namespace Domain.Entities
         public virtual DbSet<MenuMealSample> MenuMealSamples { get; set; } = null!;
         public virtual DbSet<MenuSammple> MenuSammples { get; set; } = null!;
         public virtual DbSet<Plan> Plans { get; set; } = null!;
-        public virtual DbSet<PlanCustomMenu> PlanCustomMenus { get; set; } = null!;
         public virtual DbSet<Repeat> Repeats { get; set; } = null!;
+        public virtual DbSet<Schema> Schemas { get; set; } = null!;
+        public virtual DbSet<Server> Servers { get; set; } = null!;
+        public virtual DbSet<Set> Sets { get; set; } = null!;
         public virtual DbSet<Species> Species { get; set; } = null!;
+        public virtual DbSet<State> States { get; set; } = null!;
         public virtual DbSet<Task> Tasks { get; set; } = null!;
         public virtual DbSet<TaskCheckList> TaskCheckLists { get; set; } = null!;
         public virtual DbSet<TaskCheckListReport> TaskCheckListReports { get; set; } = null!;
@@ -67,6 +77,21 @@ namespace Domain.Entities
                 entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.Password).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<AggregatedCounter>(entity =>
+            {
+                entity.HasKey(e => e.Key)
+                    .HasName("PK_HangFire_CounterAggregated");
+
+                entity.ToTable("AggregatedCounter", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_AggregatedCounter_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Area>(entity =>
@@ -140,6 +165,12 @@ namespace Domain.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bird__CareModeId__4BAC3F29");
 
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Birds)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Bird_BirdCategory");
+
                 entity.HasOne(d => d.Species)
                     .WithMany(p => p.Birds)
                     .HasForeignKey(d => d.SpeciesId)
@@ -174,6 +205,8 @@ namespace Domain.Entities
 
                 entity.Property(e => e.Material).HasMaxLength(256);
 
+                entity.Property(e => e.Name).HasMaxLength(256);
+
                 entity.HasOne(d => d.Area)
                     .WithMany(p => p.Cages)
                     .HasForeignKey(d => d.AreaId)
@@ -204,6 +237,20 @@ namespace Domain.Entities
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Name).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<Counter>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Id })
+                    .HasName("PK_HangFire_Counter");
+
+                entity.ToTable("Counter", "HangFire");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Farm>(entity =>
@@ -268,6 +315,84 @@ namespace Domain.Entities
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Name).HasMaxLength(256);
+            });
+
+            modelBuilder.Entity<Hash>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Field })
+                    .HasName("PK_HangFire_Hash");
+
+                entity.ToTable("Hash", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Hash_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Field).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Job>(entity =>
+            {
+                entity.ToTable("Job", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Job_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.HasIndex(e => e.StateName, "IX_HangFire_Job_StateName")
+                    .HasFilter("([StateName] IS NOT NULL)");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+
+                entity.Property(e => e.StateName).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<JobParameter>(entity =>
+            {
+                entity.HasKey(e => new { e.JobId, e.Name })
+                    .HasName("PK_HangFire_JobParameter");
+
+                entity.ToTable("JobParameter", "HangFire");
+
+                entity.Property(e => e.Name).HasMaxLength(40);
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.JobParameters)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK_HangFire_JobParameter_Job");
+            });
+
+            modelBuilder.Entity<JobQueue>(entity =>
+            {
+                entity.HasKey(e => new { e.Queue, e.Id })
+                    .HasName("PK_HangFire_JobQueue");
+
+                entity.ToTable("JobQueue", "HangFire");
+
+                entity.Property(e => e.Queue).HasMaxLength(50);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.FetchedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<List>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Id })
+                    .HasName("PK_HangFire_List");
+
+                entity.ToTable("List", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_List_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Manager>(entity =>
@@ -455,34 +580,6 @@ namespace Domain.Entities
                     .HasConstraintName("FK__Plan__MenuId__73BA3083");
             });
 
-            modelBuilder.Entity<PlanCustomMenu>(entity =>
-            {
-                entity.HasKey(e => new { e.PlanId, e.MenuId })
-                    .HasName("PK__PlanCust__69C5CF94CBD601DA");
-
-                entity.ToTable("PlanCustomMenu");
-
-                entity.Property(e => e.CreateAt)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.ForDay).HasColumnType("datetime");
-
-                entity.Property(e => e.Name).HasMaxLength(256);
-
-                entity.HasOne(d => d.Menu)
-                    .WithMany(p => p.PlanCustomMenus)
-                    .HasForeignKey(d => d.MenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PlanCusto__MenuI__797309D9");
-
-                entity.HasOne(d => d.Plan)
-                    .WithMany(p => p.PlanCustomMenus)
-                    .HasForeignKey(d => d.PlanId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__PlanCusto__PlanI__787EE5A0");
-            });
-
             modelBuilder.Entity<Repeat>(entity =>
             {
                 entity.ToTable("Repeat");
@@ -504,6 +601,46 @@ namespace Domain.Entities
                     .HasConstraintName("FK__Repeat__TaskSamp__1AD3FDA4");
             });
 
+            modelBuilder.Entity<Schema>(entity =>
+            {
+                entity.HasKey(e => e.Version)
+                    .HasName("PK_HangFire_Schema");
+
+                entity.ToTable("Schema", "HangFire");
+
+                entity.Property(e => e.Version).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<Server>(entity =>
+            {
+                entity.ToTable("Server", "HangFire");
+
+                entity.HasIndex(e => e.LastHeartbeat, "IX_HangFire_Server_LastHeartbeat");
+
+                entity.Property(e => e.Id).HasMaxLength(200);
+
+                entity.Property(e => e.LastHeartbeat).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Set>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Value })
+                    .HasName("PK_HangFire_Set");
+
+                entity.ToTable("Set", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Set_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.HasIndex(e => new { e.Key, e.Score }, "IX_HangFire_Set_Score");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Value).HasMaxLength(256);
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+            });
+
             modelBuilder.Entity<Species>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -519,6 +656,29 @@ namespace Domain.Entities
                     .HasForeignKey(d => d.BirdCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Species__BirdCat__403A8C7D");
+            });
+
+            modelBuilder.Entity<State>(entity =>
+            {
+                entity.HasKey(e => new { e.JobId, e.Id })
+                    .HasName("PK_HangFire_State");
+
+                entity.ToTable("State", "HangFire");
+
+                entity.HasIndex(e => e.CreatedAt, "IX_HangFire_State_CreatedAt");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(20);
+
+                entity.Property(e => e.Reason).HasMaxLength(100);
+
+                entity.HasOne(d => d.Job)
+                    .WithMany(p => p.States)
+                    .HasForeignKey(d => d.JobId)
+                    .HasConstraintName("FK_HangFire_State_Job");
             });
 
             modelBuilder.Entity<Task>(entity =>

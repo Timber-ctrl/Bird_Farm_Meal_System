@@ -26,6 +26,7 @@ namespace Data
         public IFoodRepository _food = null!;
         public IFoodCategoryRepository _foodCategory = null!;
         public IBirdCategoryRepository _birdCategory = null!;
+        public IAssignStaffRepository _assignStaff = null!;
         public IUnitOfMeasurementRepository _unitOfMeasurement = null!;
 
         public IStaffRepository Staff
@@ -81,6 +82,11 @@ namespace Data
         public IBirdCategoryRepository BirdCategory
         {
             get { return _birdCategory ??= new BirdCategoryRepository(_context); }
+        }
+
+        public IAssignStaffRepository AssignStaff
+        {
+            get { return _assignStaff ??= new AssignStaffRepository(_context); }
         }
 
         public IUnitOfMeasurementRepository UnitOfMeasurement

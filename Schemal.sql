@@ -89,10 +89,15 @@ Create Table Cage (
 	Width float not null,
 	Depth float not null,
 	ThumbnailUrl nvarchar(max),
-	CareModeId uniqueidentifier foreign key references CareMode(Id) not null,
-	SpeciesId uniqueidentifier foreign key references Species(Id) not null,
 	AreaId uniqueidentifier foreign key references Area(Id) not null,
 	CreateAt datetime not null default getdate()
+)
+Go
+Create Table CageSpecies (
+	CageId uniqueidentifier foreign key references Cage(Id) not null,
+	SpeciesId uniqueidentifier foreign key references Species(Id) not null,
+	CreateAt datetime not null default getdate(),
+	Primary key (CageId, SpeciesId)
 )
 Go
 Create Table Bird (

@@ -15,6 +15,7 @@ namespace Data
         public IFoodRepository Food { get; }
         public IFoodCategoryRepository FoodCategory { get; }
         public IBirdCategoryRepository BirdCategory { get; }
+        public IAssignStaffRepository AssignStaff { get; }
         public IUnitOfMeasurementRepository UnitOfMeasurement { get; }
 
         void BeginTransaction();
