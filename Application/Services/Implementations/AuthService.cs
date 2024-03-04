@@ -7,12 +7,14 @@ using Common.Extensions;
 using Data;
 using Data.Repositories.Interfaces;
 using Domain.Constants;
+using Domain.Entities;
 using Domain.Models.Authentications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.WebSockets;
 using System.Security.Claims;
 using System.Text;
 
@@ -37,11 +39,11 @@ namespace Application.Services.Implementations
                 // Find Staff with email and password
                 if (_staffRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
                 {
-                    var Staff = await _staffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
+                    var staff = await _staffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    Staff!.Role = UserRoles.STAFF;
-                    var accessToken = GenerateJwtToken(Staff);
+                    staff!.Role = UserRoles.STAFF;
+                    var accessToken = GenerateJwtToken(staff);
                     return new TokenModel { AccessToken = accessToken }.Ok();
                 }
 
@@ -61,12 +63,19 @@ namespace Application.Services.Implementations
                 // Find manager with email and password
                 if (_managerRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
                 {
-                    var manager = await _managerRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
-                        .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
-                        .FirstOrDefaultAsync();
+                    var user = await _managerRepository.FirstOrDefaultAsync(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password));
+                    var manager = _mapper.Map<AuthModel>(user);
                     manager!.Role = UserRoles.MANAGER;
                     var accessToken = GenerateJwtToken(manager);
-                    return new TokenModel { AccessToken = accessToken }.Ok();
+
+                    var tmp =  GetManagerData(user);
+                    var response = new AuthResponseModel()
+                    {
+                        Access_token = accessToken,
+                        User = tmp,
+                    };
+
+                    return response.Ok();
                 }
 
                 // Return 400 if not found
@@ -112,8 +121,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
-
-        private string GenerateJwtToken(AuthModel auth)
+        public string GenerateJwtToken(AuthModel auth)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -131,5 +139,20 @@ namespace Application.Services.Implementations
             return tokenHandler.WriteToken(token);
         }
 
+        public UserDataModel GetManagerData(Manager user)
+        {
+            return new UserDataModel()
+            {
+                Uuid = user.Id,
+                Role = UserRoles.MANAGER,
+                Data = new InfoManager()
+                {
+                    DisplayName = user.Name,
+                    PhotoURL = user.AvatarUrl,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                }
+            };
+        }
     }
 }

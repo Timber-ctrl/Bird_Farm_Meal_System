@@ -5,6 +5,7 @@ using Common.Errors;
 using Common.Extensions;
 using Data;
 using Data.Repositories.Interfaces;
+using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Authentications;
 using Domain.Models.Views;
@@ -16,9 +17,11 @@ namespace Application.Services.Implementations
     public class ManagerService : BaseService, IManagerService
     {
         private readonly IManagerRepository _managerRepository;
-        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly IAuthService _authService;
+        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper, IAuthService authService) : base(unitOfWork, mapper)
         {
             _managerRepository = unitOfWork.Manager;
+            _authService = authService;
         }
 
         private async Task<Manager> GetManager(Guid id)
@@ -26,7 +29,6 @@ namespace Application.Services.Implementations
             try
             {
                 var manager = await _managerRepository.Where(ma => ma.Id.Equals(id))
-                    //ToList;
                     .FirstOrDefaultAsync();
 
                 return manager != null ? manager : null!;
@@ -58,13 +60,13 @@ namespace Application.Services.Implementations
             try
             {
                 // Return 409 if email conflict
-                if (IsEmailEximas(model.Email))
+                if (IsEmailExist(model.Email))
                 {
                     return AppErrors.DUPLICATE_EMAIL.Conflict();
                 }
 
                 // Return 409 if phone number conflict
-                if (model.Phone != null && IsPhoneNumberEximas(model.Phone))
+                if (model.Phone != null && IsPhoneNumberExist(model.Phone))
                 {
                     return AppErrors.DUPLICATE_PHONE.Conflict();
                 }
@@ -73,11 +75,33 @@ namespace Application.Services.Implementations
                 var manager = _mapper.Map<Manager>(model);
 
                 _managerRepository.Add(manager);
+
+                // Save db
                 await _unitOfWork.SaveChangesAsync();
 
                 // Return created manager
                 var createdManager = await GetManager(manager.Id);
-                return _mapper.Map<ManagerViewModel>(createdManager).Created();
+                var authModel = _mapper.Map<AuthModel>(createdManager);
+                authModel.Role = UserRoles.MANAGER;
+                var accessToken =_authService.GenerateJwtToken(authModel);  
+                var response = new AuthResponseModel()
+                {
+                    Access_token = accessToken,
+                    User = new UserDataModel
+                    {
+                        Uuid = createdManager.Id,
+                        Role = UserRoles.MANAGER,
+                        Data = new InfoManager
+                        {
+                            DisplayName = createdManager.Name,
+                            PhotoURL = manager.AvatarUrl,
+                            Email = createdManager.Email,
+                            Phone = createdManager.Phone,
+
+                        }
+                    }
+                };
+                return response.Created();
             }
             catch (Exception)
             {
@@ -85,14 +109,15 @@ namespace Application.Services.Implementations
             }
         }
 
-        private bool IsEmailEximas(string email)
+        private bool IsEmailExist(string email)
         {
             return _managerRepository.Any(ma => ma.Email.Equals(email));
         }
 
-        private bool IsPhoneNumberEximas(string phone)
+        private bool IsPhoneNumberExist(string phone)
         {
             return _managerRepository.Any(ma => ma.Phone != null && ma.Phone.Equals(phone));
         }
+
     }
 }
