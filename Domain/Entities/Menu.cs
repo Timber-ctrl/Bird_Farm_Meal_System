@@ -8,7 +8,6 @@ namespace Domain.Entities
         public Menu()
         {
             MenuMeals = new HashSet<MenuMeal>();
-            PlanCustomMenus = new HashSet<PlanCustomMenu>();
             Plans = new HashSet<Plan>();
         }
 
@@ -21,7 +20,6 @@ namespace Domain.Entities
         public virtual CareMode CareMode { get; set; } = null!;
         public virtual Species Species { get; set; } = null!;
         public virtual ICollection<MenuMeal> MenuMeals { get; set; }
-        public virtual ICollection<PlanCustomMenu> PlanCustomMenus { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
     }
 }
