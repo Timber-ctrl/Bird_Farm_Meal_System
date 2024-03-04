@@ -111,6 +111,11 @@ namespace Application.Mappings
 
             // Unit Of Measurement
             CreateMap<UnitOfMeasurement, UnitOfMeasurementViewModel>();
+            CreateMap<UnitOfMeasurementCreateModel, UnitOfMeasurement>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<UnitOfMeasurementUpdateModel, UnitOfMeasurement>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
