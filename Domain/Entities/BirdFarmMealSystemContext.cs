@@ -171,12 +171,6 @@ namespace Domain.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bird__CategoryId__4BAC3F29");
 
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Birds)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Bird_BirdCategory");
-
                 entity.HasOne(d => d.Species)
                     .WithMany(p => p.Birds)
                     .HasForeignKey(d => d.SpeciesId)
