@@ -7,6 +7,7 @@ namespace Domain.Entities
     {
         public BirdCategory()
         {
+            Birds = new HashSet<Bird>();
             Species = new HashSet<Species>();
         }
 
@@ -15,6 +16,7 @@ namespace Domain.Entities
         public string Name { get; set; } = null!;
         public DateTime CreateAt { get; set; }
 
+        public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<Species> Species { get; set; }
     }
 }

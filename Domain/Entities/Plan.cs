@@ -5,11 +5,6 @@ namespace Domain.Entities
 {
     public partial class Plan
     {
-        public Plan()
-        {
-            PlanCustomMenus = new HashSet<PlanCustomMenu>();
-        }
-
         public Guid Id { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
@@ -19,6 +14,5 @@ namespace Domain.Entities
 
         public virtual Cage Cage { get; set; } = null!;
         public virtual Menu Menu { get; set; } = null!;
-        public virtual ICollection<PlanCustomMenu> PlanCustomMenus { get; set; }
     }
 }

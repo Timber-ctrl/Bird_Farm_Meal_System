@@ -8,11 +8,9 @@ namespace Domain.Entities
         public Guid MenuMealSammpleId { get; set; }
         public Guid FoodId { get; set; }
         public double Quantity { get; set; }
-        public Guid UnitOfMeasurementId { get; set; }
         public int Order { get; set; }
 
         public virtual Food Food { get; set; } = null!;
         public virtual MenuMealSample MenuMealSammple { get; set; } = null!;
-        public virtual UnitOfMeasurement UnitOfMeasurement { get; set; } = null!;
     }
 }
