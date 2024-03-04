@@ -1,24 +1,34 @@
 ﻿using Application.Services.Interfaces;
+using Application.Settings;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
 using Data.Repositories.Interfaces;
+using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Authentications;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace Application.Services.Implementations
 {
     public class ManagerService : BaseService, IManagerService
     {
         private readonly IManagerRepository _managerRepository;
-        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly IAuthService _authService;
+        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper, IAuthService authService) : base(unitOfWork, mapper)
         {
             _managerRepository = unitOfWork.Manager;
+            _authService = authService;
         }
 
         private async Task<Manager> GetManager(Guid id)
@@ -73,11 +83,33 @@ namespace Application.Services.Implementations
                 var manager = _mapper.Map<Manager>(model);
 
                 _managerRepository.Add(manager);
-                await _unitOfWork.SaveChangesAsync();
 
                 // Return created manager
                 var createdManager = await GetManager(manager.Id);
-                return _mapper.Map<ManagerViewModel>(createdManager).Created();
+                var authModel = _mapper.Map<AuthModel>(createdManager);
+                authModel.Role = UserRoles.MANAGER;
+                var accessToken =_authService.GenerateJwtToken(authModel);  
+                var response = new AuthResponseModel()
+                {
+                    Access_token = accessToken,
+                    User = new UserDataModel
+                    {
+                        Uuid = createdManager.Id,
+                        Role = UserRoles.MANAGER,
+                        Data = new InfoManager
+                        {
+                            DisplayName = createdManager.Name,
+                            PhotoURL = manager.AvatarUrl,
+                            Email = createdManager.Email,
+                            Phone = createdManager.Phone,
+
+                        }
+                    }
+                };
+                // Save db
+                await _unitOfWork.SaveChangesAsync();
+
+                return response.Created();
             }
             catch (Exception)
             {
@@ -94,5 +126,6 @@ namespace Application.Services.Implementations
         {
             return _managerRepository.Any(ma => ma.Phone != null && ma.Phone.Equals(phone));
         }
+
     }
 }

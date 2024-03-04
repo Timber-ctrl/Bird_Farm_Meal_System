@@ -29,7 +29,7 @@ namespace Application.Mappings
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
 
             // Manager
-            CreateMap<Manager, AuthModel>();
+            CreateMap<Manager, AuthModel>().ReverseMap();
             CreateMap<Manager, ManagerViewModel>();
             CreateMap<ManagerRegistrationModel, Manager>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
