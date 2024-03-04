@@ -8,5 +8,6 @@ namespace Application.Services.Interfaces
         Task<IActionResult> StaffAuthenticate(CertificateModel certificate);
         Task<IActionResult> ManagerAuthenticate(CertificateModel certificate);
         Task<AuthModel> GetUser(Guid id);
+        string GenerateJwtToken(AuthModel auth);
     }
 }
