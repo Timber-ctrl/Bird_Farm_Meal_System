@@ -63,7 +63,7 @@ namespace Domain.Entities
             {
                 entity.ToTable("Admin");
 
-                entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534374A4206")
+                entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534B75486F2")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -116,7 +116,7 @@ namespace Domain.Entities
             modelBuilder.Entity<AssignStaff>(entity =>
             {
                 entity.HasKey(e => new { e.TaskId, e.StaffId })
-                    .HasName("PK__AssignSt__15040300A479EFD8");
+                    .HasName("PK__AssignSt__15040300119A0571");
 
                 entity.ToTable("AssignStaff");
 
@@ -128,13 +128,13 @@ namespace Domain.Entities
                     .WithMany(p => p.AssignStaffs)
                     .HasForeignKey(d => d.StaffId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AssignSta__Staff__02FC7413");
+                    .HasConstraintName("FK__AssignSta__Staff__7E37BEF6");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.AssignStaffs)
                     .HasForeignKey(d => d.TaskId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AssignSta__TaskI__02084FDA");
+                    .HasConstraintName("FK__AssignSta__TaskI__7D439ABD");
             });
 
             modelBuilder.Entity<Bird>(entity =>
@@ -163,7 +163,13 @@ namespace Domain.Entities
                     .WithMany(p => p.Birds)
                     .HasForeignKey(d => d.CareModeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Bird__CareModeId__4BAC3F29");
+                    .HasConstraintName("FK__Bird__CareModeId__4CA06362");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Birds)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Bird__CategoryId__4BAC3F29");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Birds)
@@ -257,7 +263,7 @@ namespace Domain.Entities
             {
                 entity.ToTable("Farm");
 
-                entity.HasIndex(e => e.ManagerId, "UQ__Farm__3BA2AAE0015C7E47")
+                entity.HasIndex(e => e.ManagerId, "UQ__Farm__3BA2AAE0C68ED653")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -295,13 +301,13 @@ namespace Domain.Entities
                     .WithMany(p => p.Foods)
                     .HasForeignKey(d => d.FoodCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Food__FoodCatego__5535A963");
+                    .HasConstraintName("FK__Food__FoodCatego__5629CD9C");
 
                 entity.HasOne(d => d.UnitOfMeasurement)
                     .WithMany(p => p.Foods)
                     .HasForeignKey(d => d.UnitOfMeasurementId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Food__UnitOfMeas__5629CD9C");
+                    .HasConstraintName("FK__Food__UnitOfMeas__571DF1D5");
             });
 
             modelBuilder.Entity<FoodCategory>(entity =>
@@ -399,7 +405,7 @@ namespace Domain.Entities
             {
                 entity.ToTable("Manager");
 
-                entity.HasIndex(e => e.Email, "UQ__Manager__A9D1053487387471")
+                entity.HasIndex(e => e.Email, "UQ__Manager__A9D10534C8235CA1")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -422,7 +428,7 @@ namespace Domain.Entities
             modelBuilder.Entity<MealItem>(entity =>
             {
                 entity.HasKey(e => new { e.MenuMealId, e.FoodId })
-                    .HasName("PK__MealItem__A713C8B1B541EFCB");
+                    .HasName("PK__MealItem__A713C8B1523ED0BF");
 
                 entity.ToTable("MealItem");
 
@@ -448,7 +454,7 @@ namespace Domain.Entities
             modelBuilder.Entity<MealItemSample>(entity =>
             {
                 entity.HasKey(e => new { e.MenuMealSammpleId, e.FoodId })
-                    .HasName("PK__MealItem__DDD6D92C2342CCB9");
+                    .HasName("PK__MealItem__DDD6D92C3FE05996");
 
                 entity.ToTable("MealItemSample");
 
@@ -456,19 +462,13 @@ namespace Domain.Entities
                     .WithMany(p => p.MealItemSamples)
                     .HasForeignKey(d => d.FoodId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MealItemS__FoodI__628FA481");
+                    .HasConstraintName("FK__MealItemS__FoodI__6383C8BA");
 
                 entity.HasOne(d => d.MenuMealSammple)
                     .WithMany(p => p.MealItemSamples)
                     .HasForeignKey(d => d.MenuMealSammpleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MealItemS__MenuM__619B8048");
-
-                entity.HasOne(d => d.UnitOfMeasurement)
-                    .WithMany(p => p.MealItemSamples)
-                    .HasForeignKey(d => d.UnitOfMeasurementId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MealItemS__UnitO__6383C8BA");
+                    .HasConstraintName("FK__MealItemS__MenuM__628FA481");
             });
 
             modelBuilder.Entity<Menu>(entity =>
@@ -544,13 +544,13 @@ namespace Domain.Entities
                     .WithMany(p => p.MenuSammples)
                     .HasForeignKey(d => d.CareModeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MenuSammp__CareM__5AEE82B9");
+                    .HasConstraintName("FK__MenuSammp__CareM__5BE2A6F2");
 
                 entity.HasOne(d => d.Species)
                     .WithMany(p => p.MenuSammples)
                     .HasForeignKey(d => d.SpeciesId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MenuSammp__Speci__59FA5E80");
+                    .HasConstraintName("FK__MenuSammp__Speci__5AEE82B9");
             });
 
             modelBuilder.Entity<Plan>(entity =>
@@ -593,12 +593,52 @@ namespace Domain.Entities
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Repeats)
                     .HasForeignKey(d => d.TaskId)
-                    .HasConstraintName("FK__Repeat__TaskId__19DFD96B");
+                    .HasConstraintName("FK__Repeat__TaskId__151B244E");
 
                 entity.HasOne(d => d.TaskSample)
                     .WithMany(p => p.Repeats)
                     .HasForeignKey(d => d.TaskSampleId)
-                    .HasConstraintName("FK__Repeat__TaskSamp__1AD3FDA4");
+                    .HasConstraintName("FK__Repeat__TaskSamp__160F4887");
+            });
+
+            modelBuilder.Entity<Schema>(entity =>
+            {
+                entity.HasKey(e => e.Version)
+                    .HasName("PK_HangFire_Schema");
+
+                entity.ToTable("Schema", "HangFire");
+
+                entity.Property(e => e.Version).ValueGeneratedNever();
+            });
+
+            modelBuilder.Entity<Server>(entity =>
+            {
+                entity.ToTable("Server", "HangFire");
+
+                entity.HasIndex(e => e.LastHeartbeat, "IX_HangFire_Server_LastHeartbeat");
+
+                entity.Property(e => e.Id).HasMaxLength(200);
+
+                entity.Property(e => e.LastHeartbeat).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Set>(entity =>
+            {
+                entity.HasKey(e => new { e.Key, e.Value })
+                    .HasName("PK_HangFire_Set");
+
+                entity.ToTable("Set", "HangFire");
+
+                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Set_ExpireAt")
+                    .HasFilter("([ExpireAt] IS NOT NULL)");
+
+                entity.HasIndex(e => new { e.Key, e.Score }, "IX_HangFire_Set_Score");
+
+                entity.Property(e => e.Key).HasMaxLength(100);
+
+                entity.Property(e => e.Value).HasMaxLength(256);
+
+                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Schema>(entity =>
@@ -697,13 +737,13 @@ namespace Domain.Entities
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.CageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Task__CageId__7D439ABD");
+                    .HasConstraintName("FK__Task__CageId__787EE5A0");
 
                 entity.HasOne(d => d.Manager)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ManagerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Task__ManagerId__7E37BEF6");
+                    .HasConstraintName("FK__Task__ManagerId__797309D9");
             });
 
             modelBuilder.Entity<TaskCheckList>(entity =>
@@ -720,13 +760,13 @@ namespace Domain.Entities
                     .WithMany(p => p.TaskCheckLists)
                     .HasForeignKey(d => d.AsigneeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskCheck__Asign__07C12930");
+                    .HasConstraintName("FK__TaskCheck__Asign__02FC7413");
 
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.TaskCheckLists)
                     .HasForeignKey(d => d.TaskId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskCheck__TaskI__06CD04F7");
+                    .HasConstraintName("FK__TaskCheck__TaskI__02084FDA");
             });
 
             modelBuilder.Entity<TaskCheckListReport>(entity =>
@@ -741,7 +781,7 @@ namespace Domain.Entities
                     .WithMany(p => p.TaskCheckListReports)
                     .HasForeignKey(d => d.TaskCheckListId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskCheck__TaskC__0C85DE4D");
+                    .HasConstraintName("FK__TaskCheck__TaskC__07C12930");
             });
 
             modelBuilder.Entity<TaskCheckListReportItem>(entity =>
@@ -756,7 +796,7 @@ namespace Domain.Entities
                     .WithMany(p => p.TaskCheckListReportItems)
                     .HasForeignKey(d => d.TaskCheckListReportId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskCheck__TaskC__0F624AF8");
+                    .HasConstraintName("FK__TaskCheck__TaskC__0A9D95DB");
             });
 
             modelBuilder.Entity<TaskSample>(entity =>
@@ -775,7 +815,7 @@ namespace Domain.Entities
                     .WithMany(p => p.TaskSamples)
                     .HasForeignKey(d => d.CareModeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskSampl__CareM__123EB7A3");
+                    .HasConstraintName("FK__TaskSampl__CareM__0D7A0286");
             });
 
             modelBuilder.Entity<TaskSampleCheckList>(entity =>
@@ -792,7 +832,7 @@ namespace Domain.Entities
                     .WithMany(p => p.TaskSampleCheckLists)
                     .HasForeignKey(d => d.TaskSampleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TaskSampl__TaskS__160F4887");
+                    .HasConstraintName("FK__TaskSampl__TaskS__114A936A");
             });
 
             modelBuilder.Entity<Ticket>(entity =>
@@ -814,18 +854,18 @@ namespace Domain.Entities
                 entity.HasOne(d => d.Assignee)
                     .WithMany(p => p.TicketAssignees)
                     .HasForeignKey(d => d.AssigneeId)
-                    .HasConstraintName("FK__Ticket__Assignee__1F98B2C1");
+                    .HasConstraintName("FK__Ticket__Assignee__1AD3FDA4");
 
                 entity.HasOne(d => d.Cage)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.CageId)
-                    .HasConstraintName("FK__Ticket__CageId__208CD6FA");
+                    .HasConstraintName("FK__Ticket__CageId__1BC821DD");
 
                 entity.HasOne(d => d.Creator)
                     .WithMany(p => p.TicketCreators)
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Ticket__CreatorI__1EA48E88");
+                    .HasConstraintName("FK__Ticket__CreatorI__19DFD96B");
             });
 
             modelBuilder.Entity<UnitOfMeasurement>(entity =>
@@ -845,10 +885,10 @@ namespace Domain.Entities
             {
                 entity.ToTable("Staff");
 
-                entity.HasIndex(e => e.Phone, "UQ__Staff__5C7E359E0E5ED543")
+                entity.HasIndex(e => e.Phone, "UQ__Staff__5C7E359E0791B1E7")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Email, "UQ__Staff__A9D1053446988191")
+                entity.HasIndex(e => e.Email, "UQ__Staff__A9D105349A73699C")
                     .IsUnique();
 
                 entity.Property(e => e.Id).ValueGeneratedNever();

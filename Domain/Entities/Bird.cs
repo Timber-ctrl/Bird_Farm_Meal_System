@@ -14,6 +14,7 @@ namespace Domain.Entities
         public string? Code { get; set; }
         public Guid CageId { get; set; }
         public Guid SpeciesId { get; set; }
+        public Guid CategoryId { get; set; }
         public Guid CareModeId { get; set; }
         public DateTime CreateAt { get; set; }
         public Guid CategoryId { get; set; }
