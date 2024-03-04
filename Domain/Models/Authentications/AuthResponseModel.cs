@@ -1,24 +1,18 @@
-﻿using Google.Api.Gax.Rest;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Models.Authentications
+﻿namespace Domain.Models.Authentications
 {
     public class AuthResponseModel
     {
-            public string Access_token {  get; set; }   
-            public  UserDataModel User { get; set; }    
+        public string Access_token { get; set; } = null!;
+        public UserDataModel User { get; set; } = null!;
     }
+
     public class UserDataModel
     {
         public Guid Uuid { get; set; }
         public string Role { get; set; } = null!;
-        public InfoManager Data { get; set; }
-        
+        public InfoManager Data { get; set; } = null!;
     }
+
     public class InfoManager
     {
         public string DisplayName { get; set; } = null!;

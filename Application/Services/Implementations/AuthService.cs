@@ -22,13 +22,13 @@ namespace Application.Services.Implementations
 {
     public class AuthService : BaseService, IAuthService
     {
-        private readonly IStaffRepository _StaffRepository;
+        private readonly IStaffRepository _staffRepository;
         private readonly AppSettings _appSettings;
         private readonly IManagerRepository _managerRepository;
         public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<AppSettings> appSettings) : base(unitOfWork, mapper)
         {
             _appSettings = appSettings.Value;
-            _StaffRepository = unitOfWork.Staff;
+            _staffRepository = unitOfWork.Staff;
             _managerRepository = unitOfWork.Manager;
         }
 
@@ -37,13 +37,13 @@ namespace Application.Services.Implementations
             try
             {
                 // Find Staff with email and password
-                if (_StaffRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
+                if (_staffRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
                 {
-                    var Staff = await _StaffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
+                    var staff = await _staffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    Staff!.Role = UserRoles.STAFF;
-                    var accessToken = GenerateJwtToken(Staff);
+                    staff!.Role = UserRoles.STAFF;
+                    var accessToken = GenerateJwtToken(staff);
                     return new TokenModel { AccessToken = accessToken }.Ok();
                 }
 
@@ -67,12 +67,14 @@ namespace Application.Services.Implementations
                     var manager = _mapper.Map<AuthModel>(user);
                     manager!.Role = UserRoles.MANAGER;
                     var accessToken = GenerateJwtToken(manager);
-                    UserDataModel tmp =  getManagerData(user);
+
+                    var tmp =  GetManagerData(user);
                     var response = new AuthResponseModel()
                     {
                         Access_token = accessToken,
                         User = tmp,
                     };
+
                     return response.Ok();
                 }
 
@@ -90,9 +92,9 @@ namespace Application.Services.Implementations
             try
             {
                 // Find Staff in Staff table
-                if (_StaffRepository.Any(st => st.Id.Equals(id)))
+                if (_staffRepository.Any(st => st.Id.Equals(id)))
                 {
-                    var Staff = await _StaffRepository
+                    var Staff = await _staffRepository
                         .Where(st => st.Id.Equals(id))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
@@ -137,23 +139,20 @@ namespace Application.Services.Implementations
             return tokenHandler.WriteToken(token);
         }
 
-        public UserDataModel getManagerData(Manager user)
+        public UserDataModel GetManagerData(Manager user)
         {
-            Manager manager = user;
             return new UserDataModel()
             {
-                Uuid = manager.Id,
+                Uuid = user.Id,
                 Role = UserRoles.MANAGER,
                 Data = new InfoManager()
                 {
-                    DisplayName = manager.Name,
-                    PhotoURL = manager.AvatarUrl,
-                    Email = manager.Email,
-                    Phone = manager.Phone,
+                    DisplayName = user.Name,
+                    PhotoURL = user.AvatarUrl,
+                    Email = user.Email,
+                    Phone = user.Phone,
                 }
             };
-
-
         }
     }
 }
