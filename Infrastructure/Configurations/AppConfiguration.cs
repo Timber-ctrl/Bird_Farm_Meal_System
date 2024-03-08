@@ -29,6 +29,23 @@ namespace Infrastructure.Configurations
             services.AddScoped<IFoodCategoryService, FoodCategoryService>(); 
             services.AddScoped<IBirdCategoryService, BirdCategoryService>(); 
             services.AddScoped<IUnitOfMeasurementService, UnitOfMeasurementService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<ITaskCheckListService, TaskCheckListService>();
+            // day bi loi
+            services.AddScoped<ITaskCheckListReportService, TaskCheckListReportService>();
+
+            services.AddScoped<ITaskCheckListReportItemService, TaskCheckListReportItemService>();
+            services.AddScoped<ITaskSampleService, TaskSampleService>();
+            services.AddScoped<ITaskSampleCheckListService, TaskSampleCheckListService>();
+            services.AddScoped<ITicketService, TicketService>();
+            services.AddScoped<IMealItemService, MealItemService>();
+            services.AddScoped<IMealItemSampleService, MealItemSampleService>();
+            services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IMenuMealService, MenuMealService>();
+            services.AddScoped<IMenuMealSampleService, MenuMealSampleService>();
+            services.AddScoped<IMenuSampleService, MenuSampleService>();
+            services.AddScoped<IPlanService, PlanService>();
+            services.AddScoped<IRepeatService, RepeatService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }

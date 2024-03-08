@@ -7,6 +7,7 @@ using Domain.Models.Authentications;
 using Domain.Models.Creates;
 using Domain.Models.Updates;
 using Domain.Models.Views;
+using Task = Domain.Entities.Task;
 
 namespace Application.Mappings
 {
@@ -116,6 +117,123 @@ namespace Application.Mappings
                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
             CreateMap<UnitOfMeasurementUpdateModel, UnitOfMeasurement>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task
+            CreateMap<Task, TaskViewModel>();
+            CreateMap<TaskCreateModel, Task>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TaskUpdateModel, Task>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task Check List
+            CreateMap<TaskCheckList, TaskCheckListViewModel>();
+            CreateMap<TaskCheckListCreateModel, TaskCheckList>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TaskCheckListUpdateModel, TaskCheckList>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task Check List Report 
+            CreateMap<TaskCheckListReport, TaskCheckListReportViewModel>();
+            CreateMap<TaskCheckListReportCreateModel, TaskCheckListReport>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.FinishAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TaskCheckListReportUpdateModel, TaskCheckListReport>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task Check List Report Item
+            CreateMap<TaskCheckListReportItem, TaskCheckListReportItemViewModel>();
+            CreateMap<TaskCheckListReportItemCreateModel, TaskCheckListReportItem>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
+            CreateMap<TaskCheckListReportItemUpdateModel, TaskCheckListReportItem>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task Sample
+            CreateMap<TaskSample, TaskSampleViewModel>();
+            CreateMap<TaskSampleCreateModel, TaskSample>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TaskSampleUpdateModel, TaskSample>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Task Sample Check List
+            CreateMap<TaskSampleCheckList, TaskSampleCheckListViewModel>();
+            CreateMap<TaskSampleCheckListCreateModel, TaskSampleCheckList>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TaskSampleCheckListUpdateModel, TaskSampleCheckList>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Ticket
+            CreateMap<Ticket, TicketViewModel>();
+            CreateMap<TicketCreateModel, Ticket>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<TicketUpdateModel, Ticket>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Meal Item
+            CreateMap<MealItem, MealItemViewModel>();
+            CreateMap<MealItemCreateModel, MealItem>()
+               .ForMember(dest => dest.MenuMealId, opt => opt.MapFrom(src => Guid.NewGuid()));
+            CreateMap<MealItemUpdateModel, MealItem>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Meal Item
+            CreateMap<MealItemSample, MealItemSampleViewModel>();
+            CreateMap<MealItemSampleCreateModel, MealItemSample>()
+               .ForMember(dest => dest.MenuMealSammpleId, opt => opt.MapFrom(src => Guid.NewGuid()));
+            CreateMap<MealItemSampleUpdateModel, MealItemSample>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Menu
+            CreateMap<Menu, MenuViewModel>();
+            CreateMap<MenuCreateModel, Menu>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<MenuUpdateModel, Menu>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Menu Meal
+            CreateMap<MenuMeal, MenuMealViewModel>();
+            CreateMap<MenuMealCreateModel, MenuMeal>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<MenuMealUpdateModel, MenuMeal>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Menu Meal Sample
+            CreateMap<MenuMealSample, MenuMealSampleViewModel>();
+            CreateMap<MenuMealSampleCreateModel, MenuMealSample>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<MenuMealSampleUpdateModel, MenuMealSample>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Menu Sample
+            CreateMap<MenuSammple, MenuSampleViewModel>();
+            CreateMap<MenuSampleCreateModel, MenuSammple>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<MenuSampleUpdateModel, MenuSammple>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Plan
+            CreateMap<Plan, PlanViewModel>();
+            CreateMap<PlanCreateModel, Plan>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<PlanUpdateModel, Plan>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Repeat
+            CreateMap<Repeat, RepeatViewModel>();
+            CreateMap<RepeatCreateModel, Repeat>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
+            CreateMap<RepeatUpdateModel, Repeat>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
         }
     }
 }
