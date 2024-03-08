@@ -16,7 +16,6 @@ namespace Domain.Entities
         public Guid SpeciesId { get; set; }
         public Guid CategoryId { get; set; }
         public Guid CareModeId { get; set; }
-        public Guid CategoryId { get; set; }
         public DateTime CreateAt { get; set; }
 
         public virtual Cage Cage { get; set; } = null!;
