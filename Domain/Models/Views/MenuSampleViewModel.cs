@@ -4,8 +4,8 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public Guid SpeciesId { get; set; }
-        public Guid CareModeId { get; set; }
+        public SpeciesViewModel Species { get; set; } = null!;
+        public CareModeViewModel CareMode { get; set; } = null!;
         public DateTime CreateAt { get; set; }
     }
 }
