@@ -2,10 +2,10 @@
 {
     public class MealItemViewModel
     {
-        public Guid MenuMealId { get; set; }
-        public Guid FoodId { get; set; }
+        public MenuMealViewModel MenuMeal { get; set; } = null!;
+        public FoodViewModel Food { get; set; } = null!;
         public double Quantity { get; set; }
-        public Guid UnitOfMeasurementId { get; set; }
+        public UnitOfMeasurementViewModel? UnitOfMeasurement { get; set; }
         public int Order { get; set; }
     }
 }
