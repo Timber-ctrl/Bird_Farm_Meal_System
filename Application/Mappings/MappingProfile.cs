@@ -180,10 +180,9 @@ namespace Application.Mappings
             CreateMap<MealItemUpdateModel, MealItem>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
-            // Meal Item
+            // Meal Item Sample
             CreateMap<MealItemSample, MealItemSampleViewModel>();
-            CreateMap<MealItemSampleCreateModel, MealItemSample>()
-               .ForMember(dest => dest.MenuMealSammpleId, opt => opt.MapFrom(src => Guid.NewGuid()));
+            CreateMap<MealItemSampleCreateModel, MealItemSample>();
             CreateMap<MealItemSampleUpdateModel, MealItemSample>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 

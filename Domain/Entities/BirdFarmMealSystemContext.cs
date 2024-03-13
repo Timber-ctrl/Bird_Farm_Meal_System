@@ -447,7 +447,7 @@ namespace Domain.Entities
 
             modelBuilder.Entity<MealItemSample>(entity =>
             {
-                entity.HasKey(e => new { e.MenuMealSammpleId, e.FoodId })
+                entity.HasKey(e => new { e.MenuMealSampleId, e.FoodId })
                     .HasName("PK__MealItem__DDD6D92C3FE05996");
 
                 entity.ToTable("MealItemSample");
@@ -460,7 +460,7 @@ namespace Domain.Entities
 
                 entity.HasOne(d => d.MenuMealSammple)
                     .WithMany(p => p.MealItemSamples)
-                    .HasForeignKey(d => d.MenuMealSammpleId)
+                    .HasForeignKey(d => d.MenuMealSampleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MealItemS__MenuM__628FA481");
             });

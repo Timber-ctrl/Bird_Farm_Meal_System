@@ -43,6 +43,7 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateMealItemSample([FromForm] MealItemSampleCreateModel model)
         {
@@ -52,9 +53,10 @@ namespace Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateMealItemSample([FromRoute] Guid id, [FromForm] MealItemSampleUpdateModel model)

@@ -4,10 +4,10 @@
     {
         public Guid Id { get; set; }
         public string TicketCategory { get; set; } = null!;
-        public Guid CreatorId { get; set; }
+        public StaffViewModel Creator { get; set; } = null!;
         public string Priority { get; set; } = null!;
-        public Guid? AssigneeId { get; set; }
-        public Guid? CageId { get; set; }
+        public StaffViewModel Assignee { get; set; } = null!;
+        public CageViewModel Cage { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string Image { get; set; } = null!;
         public string Status { get; set; } = null!;
