@@ -2,8 +2,8 @@
 {
     public class MealItemSampleViewModel
     {
-        public Guid MenuMealSammpleId { get; set; }
-        public Guid FoodId { get; set; }
+        public MenuMealSampleViewModel MenuMealSample { get; set; } = null!;
+        public FoodViewModel Food { get; set; } = null!;
         public double Quantity { get; set; }
         public int Order { get; set; }
     }

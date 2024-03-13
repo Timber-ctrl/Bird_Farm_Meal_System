@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
-        public Guid TaskSampleId { get; set; }
+        public TaskSampleViewModel TaskSample { get; set; } = null!;
         public int Order { get; set; }
         public DateTime CreateAt { get; set; }
     }

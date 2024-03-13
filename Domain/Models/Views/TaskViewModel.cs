@@ -3,7 +3,7 @@
     public class TaskViewModel
     {
         public Guid Id { get; set; }
-        public Guid CageId { get; set; }
+        public CageViewModel? Cage { get; set; }
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public ManagerViewModel? Manager { get; set; }
