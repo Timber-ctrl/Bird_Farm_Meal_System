@@ -9,6 +9,7 @@
         public bool Gender { get; set; }
         public DateTime DayOfBirth { get; set; }
         public string? Code { get; set; }
+        public CageViewModel Cage { get; set; } = null!;
         public SpeciesViewModel Species { get; set; } = null!;
         public CareModeViewModel CareMode { get; set; } = null!;
         public BirdCategoryViewModel Category { get; set; } = null!;
