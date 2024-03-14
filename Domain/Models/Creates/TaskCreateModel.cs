@@ -9,5 +9,6 @@ namespace Domain.Models.Creates
         public string? Description { get; set; }
         public Guid ManagerId { get; set; }
         public DateTime Deadline { get; set; }
+        public string Status { get; set; } = null!;
     }
 }
