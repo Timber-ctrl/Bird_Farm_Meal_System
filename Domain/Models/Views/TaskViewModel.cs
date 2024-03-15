@@ -1,4 +1,6 @@
-﻿namespace Domain.Models.Views
+﻿using Domain.Entities;
+
+namespace Domain.Models.Views
 {
     public class TaskViewModel
     {
@@ -9,6 +11,7 @@
         public ManagerViewModel Manager { get; set; } = null!;
         public DateTime DeadLine { get; set; }
         public DateTime CreateAt { get; set; }
+        public ICollection<TaskCheckListViewModel> CheckLists { get; set; } = new List<TaskCheckListViewModel>();
         public string Status { get; set; } = null!;
     }
 }

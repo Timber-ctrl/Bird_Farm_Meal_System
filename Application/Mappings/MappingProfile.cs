@@ -119,7 +119,8 @@ namespace Application.Mappings
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Task
-            CreateMap<Task, TaskViewModel>();
+            CreateMap<Task, TaskViewModel>()
+               .ForMember(dest => dest.CheckLists, opt => opt.MapFrom(src => src.TaskCheckLists));
             CreateMap<TaskCreateModel, Task>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
