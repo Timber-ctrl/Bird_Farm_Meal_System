@@ -34,6 +34,10 @@ namespace Application.Services.Implementations
                 {
                     query= query.Where(cg => cg.Title.Contains(filter.Title));
                 }
+                if (filter.Status != null)
+                {
+                    query = query.Where(cg => cg.Status.Contains(filter.Status));
+                }
                 if (filter.CageId != null)
                 {
                     query = query.Where(cg => cg.CageId.Equals(filter.CageId));
