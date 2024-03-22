@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public partial class Task
     {
@@ -19,7 +16,7 @@ namespace Domain.Entities
         public Guid ManagerId { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime CreateAt { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } = null!;
 
         public virtual Cage Cage { get; set; } = null!;
         public virtual Manager Manager { get; set; } = null!;

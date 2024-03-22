@@ -11,7 +11,7 @@ using Task = Domain.Entities.Task;
 
 namespace Application.Mappings
 {
-    public class MappingProfile: Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
@@ -123,7 +123,14 @@ namespace Application.Mappings
                .ForMember(dest => dest.CheckLists, opt => opt.MapFrom(src => src.TaskCheckLists));
             CreateMap<TaskCreateModel, Task>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
-               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow))
+               .ForMember(dest => dest.AssignStaffs, opt => opt.MapFrom((src, dest) => src.AssigneeIds != null ? src.AssigneeIds.Select(id =>
+               new AssignStaff
+               {
+                   StaffId = id,
+                   CreateAt = DateTimeHelper.VnNow,
+                   TaskId = dest.Id,
+               }) : null!));
             CreateMap<TaskUpdateModel, Task>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
@@ -234,6 +241,8 @@ namespace Application.Mappings
             CreateMap<RepeatUpdateModel, Repeat>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // Assign Staff
+            CreateMap<AssignStaff, AssignStaffViewModel>();
         }
     }
 }

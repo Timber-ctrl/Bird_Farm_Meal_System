@@ -12,6 +12,7 @@ namespace Domain.Models.Views
         public DateTime DeadLine { get; set; }
         public DateTime CreateAt { get; set; }
         public ICollection<TaskCheckListViewModel> CheckLists { get; set; } = new List<TaskCheckListViewModel>();
+        public ICollection<AssignStaffViewModel> AssignStaffs { get; set; } = new List<AssignStaffViewModel>();
         public string Status { get; set; } = null!;
     }
 }
