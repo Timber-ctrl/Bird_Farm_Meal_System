@@ -33,7 +33,6 @@ namespace Infrastructure.Configurations
             services.AddScoped<ITaskCheckListService, TaskCheckListService>();
             // day bi loi
             services.AddScoped<ITaskCheckListReportService, TaskCheckListReportService>();
-
             services.AddScoped<ITaskCheckListReportItemService, TaskCheckListReportItemService>();
             services.AddScoped<ITaskSampleService, TaskSampleService>();
             services.AddScoped<ITaskSampleCheckListService, TaskSampleCheckListService>();
