@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Implementations
-{   //cai nay bi loi Missing map from Domain.Entities.TaskCheckListReport to Domain.Entities.TaskCheckListReport. Create using CreateMap<TaskCheckListReport, TaskCheckListReport>.
+{  
+    //cai nay bi loi Missing map from Domain.Entities.TaskCheckListReport to Domain.Entities.TaskCheckListReport. Create using CreateMap<TaskCheckListReport, TaskCheckListReport>.
     public class TaskCheckListService : BaseService ,ITaskCheckListService
     {
         private readonly ITaskCheckListRepository _taskCheckListRepository;
