@@ -4,30 +4,59 @@ using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
+using Data.Repositories.Implementations;
 using Data.Repositories.Interfaces;
 using Domain.Entities;
 using Domain.Models.Authentications;
+using Domain.Models.Filters;
+using Domain.Models.Pagination;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Implementations
 {
-    public class staffService : BaseService, IStaffService
+    public class StaffService : BaseService, IStaffService
     {
-        private readonly IStaffRepository _StaffRepository;
-        public staffService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly IStaffRepository _staffRepository;
+        public StaffService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-            _StaffRepository = unitOfWork.Staff;
+            _staffRepository = unitOfWork.Staff;
+        }
+
+        public async Task<IActionResult> GetStaffs(StaffFilterModel filter, PaginationRequestModel pagination)
+        {
+            try
+            {
+                var query = _staffRepository.GetAll();
+                if (filter.Name != null)
+                {
+                    query = query.Where(cg => cg.Name.Contains(filter.Name));
+                }
+                if (filter.Status != null)
+                {
+                    query = query.Where(cg => cg.Status.Equals(filter.Status));
+                }
+                var totalRows = query.Count();
+                var species = await query.AsNoTracking()
+                    .Paginate(pagination)
+                    .ProjectTo<StaffViewModel>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                return species.ToPaged(pagination, totalRows).Ok();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async Task<Staff> GetStaff(Guid id)
         {
             try
             {
-                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
+                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
                     .FirstOrDefaultAsync();
-                return Staff != null ? Staff : null!;
+                return staff != null ? staff : null!;
             }
             catch (Exception)
             {
@@ -39,10 +68,10 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
+                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
                     .ProjectTo<StaffViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync();
-                return Staff != null ? Staff.Ok() : AppErrors.NOT_FOUND.NotFound();
+                return staff != null ? staff.Ok() : AppErrors.NOT_FOUND.NotFound();
             }
             catch (Exception)
             {
@@ -67,12 +96,12 @@ namespace Application.Services.Implementations
                 }
 
                 // Create new Staff
-                var Staff = _mapper.Map<Staff>(model);
-                _StaffRepository.Add(Staff);
+                var staff = _mapper.Map<Staff>(model);
+                _staffRepository.Add(staff);
                 await _unitOfWork.SaveChangesAsync();
 
                 // Return created Staff
-                var createdStaff = await GetStaff(Staff.Id);
+                var createdStaff = await GetStaff(staff.Id);
                 return _mapper.Map<StaffViewModel>(createdStaff).Created();
             }
             catch (Exception)
@@ -83,12 +112,12 @@ namespace Application.Services.Implementations
 
         private bool IsEmailExists(string email)
         {
-            return _StaffRepository.Any(st => st.Email.Equals(email));
+            return _staffRepository.Any(st => st.Email.Equals(email));
         }
 
         private bool IsPhoneNumberExists(string phone)
         {
-            return _StaffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
+            return _staffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
         }
     }
 }

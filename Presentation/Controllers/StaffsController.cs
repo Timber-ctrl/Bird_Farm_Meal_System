@@ -1,7 +1,10 @@
-﻿using Application.Services.Interfaces;
+﻿using Application.Services.Implementations;
+using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
 using Domain.Models.Authentications;
+using Domain.Models.Filters;
+using Domain.Models.Pagination;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +19,19 @@ namespace Presentation.Controllers
         public StaffsController(IStaffService staffService)
         {
             _staffService = staffService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStaffs([FromQuery] StaffFilterModel filter, [FromQuery] PaginationRequestModel pagination)
+        {
+            try
+            {
+                return await _staffService.GetStaffs(filter, pagination);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet]

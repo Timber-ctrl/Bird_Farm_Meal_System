@@ -1,10 +1,13 @@
 ﻿using Domain.Models.Authentications;
+using Domain.Models.Filters;
+using Domain.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Services.Interfaces
 {
     public interface IStaffService
     {
+        Task<IActionResult> GetStaffs(StaffFilterModel filter, PaginationRequestModel pagination);
         Task<IActionResult> GetStaffInformation(Guid id);
         Task<IActionResult> CreateStaff(StaffRegistrationModel model);
     }
