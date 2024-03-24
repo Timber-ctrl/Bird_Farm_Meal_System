@@ -8,7 +8,6 @@ namespace Domain.Entities
         public Species()
         {
             Birds = new HashSet<Bird>();
-            Cages = new HashSet<Cage>();
             MenuSammples = new HashSet<MenuSammple>();
             Menus = new HashSet<Menu>();
         }
@@ -21,7 +20,6 @@ namespace Domain.Entities
 
         public virtual BirdCategory BirdCategory { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
-        public virtual ICollection<Cage> Cages { get; set; }
         public virtual ICollection<MenuSammple> MenuSammples { get; set; }
         public virtual ICollection<Menu> Menus { get; set; }
     }

@@ -11,6 +11,6 @@ namespace Domain.Entities
         public int Order { get; set; }
 
         public virtual Food Food { get; set; } = null!;
-        public virtual MenuMealSample MenuMealSammple { get; set; } = null!;
+        public virtual MenuMealSample MenuMealSample { get; set; } = null!;
     }
 }

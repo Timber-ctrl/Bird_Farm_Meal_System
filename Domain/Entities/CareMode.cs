@@ -8,7 +8,6 @@ namespace Domain.Entities
         public CareMode()
         {
             Birds = new HashSet<Bird>();
-            Cages = new HashSet<Cage>();
             MenuSammples = new HashSet<MenuSammple>();
             Menus = new HashSet<Menu>();
             TaskSamples = new HashSet<TaskSample>();
@@ -20,7 +19,6 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
 
         public virtual ICollection<Bird> Birds { get; set; }
-        public virtual ICollection<Cage> Cages { get; set; }
         public virtual ICollection<MenuSammple> MenuSammples { get; set; }
         public virtual ICollection<Menu> Menus { get; set; }
         public virtual ICollection<TaskSample> TaskSamples { get; set; }

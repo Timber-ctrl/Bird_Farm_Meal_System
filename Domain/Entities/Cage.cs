@@ -22,14 +22,10 @@ namespace Domain.Entities
         public double Width { get; set; }
         public double Depth { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public Guid CareModeId { get; set; }
-        public Guid SpeciesId { get; set; }
         public Guid AreaId { get; set; }
         public DateTime CreateAt { get; set; }
 
         public virtual Area Area { get; set; } = null!;
-        public virtual CareMode CareMode { get; set; } = null!;
-        public virtual Species Species { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }

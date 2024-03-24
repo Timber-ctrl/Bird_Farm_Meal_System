@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities
 {
@@ -55,7 +52,7 @@ namespace Domain.Entities
         public virtual DbSet<TaskSampleCheckList> TaskSampleCheckLists { get; set; } = null!;
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; } = null!;
-        public virtual DbSet<Staff> Staff { get; set; } = null!;
+        public virtual DbSet<Staff> staff { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -212,18 +209,6 @@ namespace Domain.Entities
                     .HasForeignKey(d => d.AreaId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Cage__AreaId__45F365D3");
-
-                entity.HasOne(d => d.CareMode)
-                    .WithMany(p => p.Cages)
-                    .HasForeignKey(d => d.CareModeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cage__CareModeId__440B1D61");
-
-                entity.HasOne(d => d.Species)
-                    .WithMany(p => p.Cages)
-                    .HasForeignKey(d => d.SpeciesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Cage__SpeciesId__44FF419A");
             });
 
             modelBuilder.Entity<CareMode>(entity =>
@@ -458,7 +443,7 @@ namespace Domain.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MealItemS__FoodI__6383C8BA");
 
-                entity.HasOne(d => d.MenuMealSammple)
+                entity.HasOne(d => d.MenuMealSample)
                     .WithMany(p => p.MealItemSamples)
                     .HasForeignKey(d => d.MenuMealSampleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -635,46 +620,6 @@ namespace Domain.Entities
                 entity.Property(e => e.ExpireAt).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<Schema>(entity =>
-            {
-                entity.HasKey(e => e.Version)
-                    .HasName("PK_HangFire_Schema");
-
-                entity.ToTable("Schema", "HangFire");
-
-                entity.Property(e => e.Version).ValueGeneratedNever();
-            });
-
-            modelBuilder.Entity<Server>(entity =>
-            {
-                entity.ToTable("Server", "HangFire");
-
-                entity.HasIndex(e => e.LastHeartbeat, "IX_HangFire_Server_LastHeartbeat");
-
-                entity.Property(e => e.Id).HasMaxLength(200);
-
-                entity.Property(e => e.LastHeartbeat).HasColumnType("datetime");
-            });
-
-            modelBuilder.Entity<Set>(entity =>
-            {
-                entity.HasKey(e => new { e.Key, e.Value })
-                    .HasName("PK_HangFire_Set");
-
-                entity.ToTable("Set", "HangFire");
-
-                entity.HasIndex(e => e.ExpireAt, "IX_HangFire_Set_ExpireAt")
-                    .HasFilter("([ExpireAt] IS NOT NULL)");
-
-                entity.HasIndex(e => new { e.Key, e.Score }, "IX_HangFire_Set_Score");
-
-                entity.Property(e => e.Key).HasMaxLength(100);
-
-                entity.Property(e => e.Value).HasMaxLength(256);
-
-                entity.Property(e => e.ExpireAt).HasColumnType("datetime");
-            });
-
             modelBuilder.Entity<Species>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -726,6 +671,8 @@ namespace Domain.Entities
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Deadline).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasMaxLength(256);
 
                 entity.HasOne(d => d.Cage)
                     .WithMany(p => p.Tasks)
