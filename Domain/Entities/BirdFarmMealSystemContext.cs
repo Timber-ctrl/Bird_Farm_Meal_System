@@ -422,12 +422,6 @@ namespace Domain.Entities
                     .HasForeignKey(d => d.MenuMealId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MealItem__MenuMe__6EF57B66");
-
-                entity.HasOne(d => d.UnitOfMeasurement)
-                    .WithMany(p => p.MealItems)
-                    .HasForeignKey(d => d.UnitOfMeasurementId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__MealItem__UnitOf__70DDC3D8");
             });
 
             modelBuilder.Entity<MealItemSample>(entity =>
