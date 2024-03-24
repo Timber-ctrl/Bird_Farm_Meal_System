@@ -9,7 +9,7 @@ namespace Domain.Models.Views
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public ManagerViewModel Manager { get; set; } = null!;
-        public DateTime DeadLine { get; set; }
+        public DateTime Deadline { get; set; }
         public DateTime CreateAt { get; set; }
         public ICollection<TaskCheckListViewModel> CheckLists { get; set; } = new List<TaskCheckListViewModel>();
         public ICollection<AssignStaffViewModel> AssignStaffs { get; set; } = new List<AssignStaffViewModel>();
