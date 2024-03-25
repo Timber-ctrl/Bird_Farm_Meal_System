@@ -11,5 +11,6 @@ namespace Domain.Models.Creates
         public DateTime Deadline { get; set; }
         public string Status { get; set; } = null!;
         public ICollection<Guid>? AssigneeIds { get; set; }
+        public ICollection<TaskCheckListCreateModel> CheckLists { get; set; } = new List<TaskCheckListCreateModel>();
     }
 }

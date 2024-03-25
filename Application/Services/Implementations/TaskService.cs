@@ -103,7 +103,6 @@ namespace Application.Services.Implementations
             {
                 throw;
             }
-
         }
 
         public async Task<IActionResult> UpdateTask(Guid id, TaskUpdateModel model)

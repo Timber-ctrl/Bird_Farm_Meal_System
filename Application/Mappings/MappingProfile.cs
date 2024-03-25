@@ -130,6 +130,17 @@ namespace Application.Mappings
                    StaffId = id,
                    CreateAt = DateTimeHelper.VnNow,
                    TaskId = dest.Id,
+               }) : null!))
+               .ForMember(dest => dest.TaskCheckLists, opt => opt.MapFrom((src, dest) => src.CheckLists != null ? src.CheckLists.Select(cl =>
+               new TaskCheckList
+               {
+                   Id = Guid.NewGuid(),
+                   CreateAt = DateTimeHelper.VnNow,
+                   TaskId = dest.Id,
+                   AsigneeId = cl.AsigneeId,
+                   Order =  cl.Order,
+                   Title = cl.Title,
+                   Status = false
                }) : null!));
             CreateMap<TaskUpdateModel, Task>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
