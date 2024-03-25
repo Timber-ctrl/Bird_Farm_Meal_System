@@ -9,6 +9,7 @@ namespace Domain.Models.Views
     public class PlanViewModel
     {
         public Guid Id { get; set; }
+        public string Title { get; set; } = null!;
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public MenuViewModel Menu { get; set; } = null!;

@@ -8,6 +8,7 @@ namespace Domain.Models.Creates
 {
     public class PlanCreateModel
     {
+        public string Title { get; set; } = null!;
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public Guid MenuId { get; set; }

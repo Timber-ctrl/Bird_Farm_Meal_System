@@ -183,13 +183,13 @@ Create Table MealItem (
 	MenuMealId uniqueidentifier foreign key references MenuMeal(Id) not null,
 	FoodId  uniqueidentifier foreign key references Food(Id) not null,
 	Quantity float not null,
-	UnitOfMeasurementId uniqueidentifier foreign key references UnitOfMeasurement(Id) not null,
 	[Order] int not null,
 	Primary key (MenuMealId, FoodId)
 )
 Go
 Create Table [Plan] (
 	Id uniqueidentifier primary key,
+	Title nvarchar(256) not null,
 	[From] datetime not null,
 	[To] datetime not null,
 	MenuId uniqueidentifier foreign key references Menu(Id) not null, 
