@@ -13,12 +13,8 @@ namespace Domain.Entities
 
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public Guid SpeciesId { get; set; }
-        public Guid CareModeId { get; set; }
         public DateTime CreateAt { get; set; }
 
-        public virtual CareMode CareMode { get; set; } = null!;
-        public virtual Species Species { get; set; } = null!;
         public virtual ICollection<MenuMeal> MenuMeals { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
     }

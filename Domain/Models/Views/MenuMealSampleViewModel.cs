@@ -7,5 +7,6 @@
         public TimeSpan From { get; set; }
         public TimeSpan To { get; set; }
         public DateTime CreateAt { get; set; }
+        public ICollection<MealItemSampleViewModel> MealItemSamples { get; set; } = new List<MealItemSampleViewModel>();
     }
 }

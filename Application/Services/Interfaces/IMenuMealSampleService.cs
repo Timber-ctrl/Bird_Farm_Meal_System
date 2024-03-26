@@ -12,5 +12,6 @@ namespace Application.Services.Interfaces
         Task<IActionResult> GetMenuMealSample(Guid id);
         Task<IActionResult> CreateMenuMealSample(MenuMealSampleCreateModel model);
         Task<IActionResult> UpdateMenuMealSample(Guid id, MenuMealSampleUpdateModel model);
+        Task<IActionResult> DeleteMenuMealSample(Guid id);
     }
 }

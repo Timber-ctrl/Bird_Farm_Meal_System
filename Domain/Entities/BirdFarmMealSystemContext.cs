@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Domain.Entities
 {
@@ -52,7 +55,7 @@ namespace Domain.Entities
         public virtual DbSet<TaskSampleCheckList> TaskSampleCheckLists { get; set; } = null!;
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; } = null!;
-        public virtual DbSet<Staff> staff { get; set; } = null!;
+        public virtual DbSet<Staff> Staff { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -422,6 +425,12 @@ namespace Domain.Entities
                     .HasForeignKey(d => d.MenuMealId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MealItem__MenuMe__6EF57B66");
+
+                entity.HasOne(d => d.UnitOfMeasurement)
+                    .WithMany(p => p.MealItems)
+                    .HasForeignKey(d => d.UnitOfMeasurementId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__MealItem__UnitOf__70DDC3D8");
             });
 
             modelBuilder.Entity<MealItemSample>(entity =>
@@ -455,18 +464,6 @@ namespace Domain.Entities
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Name).HasMaxLength(256);
-
-                entity.HasOne(d => d.CareMode)
-                    .WithMany(p => p.Menus)
-                    .HasForeignKey(d => d.CareModeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Menu__CareModeId__6754599E");
-
-                entity.HasOne(d => d.Species)
-                    .WithMany(p => p.Menus)
-                    .HasForeignKey(d => d.SpeciesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Menu__SpeciesId__66603565");
             });
 
             modelBuilder.Entity<MenuMeal>(entity =>
@@ -499,6 +496,12 @@ namespace Domain.Entities
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Name).HasMaxLength(256);
+
+                entity.HasOne(d => d.MenuSample)
+                    .WithMany(p => p.MenuMealSamples)
+                    .HasForeignKey(d => d.MenuSampleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MenuMealSample_MenuSammple");
             });
 
             modelBuilder.Entity<MenuSammple>(entity =>
@@ -538,6 +541,8 @@ namespace Domain.Entities
 
                 entity.Property(e => e.From).HasColumnType("datetime");
 
+                entity.Property(e => e.Title).HasMaxLength(256);
+
                 entity.Property(e => e.To).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Cage)
@@ -549,7 +554,6 @@ namespace Domain.Entities
                 entity.HasOne(d => d.Menu)
                     .WithMany(p => p.Plans)
                     .HasForeignKey(d => d.MenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Plan__MenuId__73BA3083");
             });
 

@@ -68,5 +68,19 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteMenuMeal([FromRoute] Guid id)
+        {
+            try
+            {
+                return await _menuMealService.DeleteMenuMeal(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

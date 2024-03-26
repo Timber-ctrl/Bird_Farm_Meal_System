@@ -112,5 +112,36 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
+        public async Task<IActionResult> DeleteMenuMealSample(Guid id)
+        {
+            try
+            {
+                if (!IsMenuMealSampleExist(id))
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                var menuMealSample = await _menuMealSampleRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                _menuMealSampleRepository.Remove(menuMealSample);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? new NoContentResult() : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private bool IsMenuMealSampleExist(Guid id)
+        {
+            try
+            {
+                return _menuMealSampleRepository.Any(mi => mi.Id.Equals(id));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

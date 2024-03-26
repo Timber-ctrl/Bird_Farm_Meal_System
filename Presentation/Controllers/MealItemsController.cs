@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/meal-items")]
     [ApiController]
     public class MealItemsController : ControllerBase
     {
@@ -62,6 +62,20 @@ namespace Presentation.Controllers
             try
             {
                 return await _mealItemService.UpdateMealItem(id, model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteMealItem([FromRoute] Guid id)
+        {
+            try
+            {
+                return await _mealItemService.DeleteMealItem(id);
             }
             catch (Exception ex)
             {

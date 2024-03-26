@@ -17,7 +17,7 @@ using Domain.Models.Updates;
 
 namespace Application.Services.Implementations
 {
-    public class MealItemService : BaseService , IMealItemService
+    public class MealItemService : BaseService, IMealItemService
     {
         private readonly IMealItemRepository _mealItemRepository;
         public MealItemService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
@@ -50,7 +50,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var mealItem = await _mealItemRepository.Where(cg => cg.MenuMealId.Equals(id)).AsNoTracking()
+                var mealItem = await _mealItemRepository.Where(cg => cg.Id.Equals(id)).AsNoTracking()
                     .ProjectTo<MealItemViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync() ?? null!;
                 return mealItem != null ? mealItem.Ok() : AppErrors.NOT_FOUND.NotFound();
@@ -74,35 +74,68 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> CreateMealItem(MealItemCreateModel model)
         {
             try
             {
                 var mealItem = _mapper.Map<MealItem>(model);
-                
+
                 _mealItemRepository.Add(mealItem);
                 var result = await _unitOfWork.SaveChangesAsync();
-                return result > 0 ? await GetCreatedMealItem(mealItem.MenuMealId) : AppErrors.CREATE_FAILED.BadRequest();
+                return result > 0 ? await GetCreatedMealItem(mealItem.Id) : AppErrors.CREATE_FAILED.BadRequest();
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public async Task<IActionResult> UpdateMealItem(Guid id, MealItemUpdateModel model)
         {
             try
             {
-                var mealItem = await _mealItemRepository.FirstOrDefaultAsync(cg => cg.MenuMealId.Equals(id));
+                var mealItem = await _mealItemRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
                 if (mealItem == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
-               
+
                 _mapper.Map(model, mealItem);
                 _mealItemRepository.Update(mealItem);
                 var result = await _unitOfWork.SaveChangesAsync();
-                return result > 0 ? await GetMealItem(mealItem.MenuMealId) : AppErrors.UPDATE_FAILED.BadRequest();
+                return result > 0 ? await GetMealItem(mealItem.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> DeleteMealItem(Guid id)
+        {
+            try
+            {
+                if (!IsMealItemExist(id))
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                var mealItem = await _mealItemRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                _mealItemRepository.Remove(mealItem);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? new NoContentResult() : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private bool IsMealItemExist(Guid id)
+        {
+            try
+            {
+                return _mealItemRepository.Any(mi => mi.Id.Equals(id));
             }
             catch (Exception)
             {

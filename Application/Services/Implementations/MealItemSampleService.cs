@@ -56,7 +56,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var mealItemSample = await _mealItemSampleRepository.Where(cg => cg.MenuMealSampleId.Equals(id)).AsNoTracking()
+                var mealItemSample = await _mealItemSampleRepository.Where(cg => cg.Id.Equals(id)).AsNoTracking()
                     .ProjectTo<MealItemSampleViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync() ?? null!;
                 return mealItemSample != null ? mealItemSample.Ok() : AppErrors.NOT_FOUND.NotFound();
@@ -70,7 +70,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var mealItemSample = await _mealItemSampleRepository.Where(cg => cg.MenuMealSampleId.Equals(id)).AsNoTracking()
+                var mealItemSample = await _mealItemSampleRepository.Where(cg => cg.Id.Equals(id)).AsNoTracking()
                     .ProjectTo<MealItemSampleViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync() ?? null!;
                 return mealItemSample != null ? mealItemSample.Created() : AppErrors.NOT_FOUND.NotFound();
@@ -87,18 +87,19 @@ namespace Application.Services.Implementations
                 var mealItemSample = _mapper.Map<MealItemSample>(model);
                 _mealItemSampleRepository.Add(mealItemSample);
                 var result = await _unitOfWork.SaveChangesAsync();
-                return result > 0 ? await GetCreatedMealItemSample(mealItemSample.MenuMealSampleId) : AppErrors.CREATE_FAILED.BadRequest();
+                return result > 0 ? await GetCreatedMealItemSample(mealItemSample.Id) : AppErrors.CREATE_FAILED.BadRequest();
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
         public async Task<IActionResult> UpdateMealItemSample(Guid id, MealItemSampleUpdateModel model)
         {
             try
             {
-                var mealItemSample = await _mealItemSampleRepository.FirstOrDefaultAsync(cg => cg.MenuMealSampleId.Equals(id));
+                var mealItemSample = await _mealItemSampleRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
                 if (mealItemSample == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
@@ -106,7 +107,38 @@ namespace Application.Services.Implementations
                 _mapper.Map(model, mealItemSample);
                 _mealItemSampleRepository.Update(mealItemSample);
                 var result = await _unitOfWork.SaveChangesAsync();
-                return result > 0 ? await GetMealItemSample(mealItemSample.MenuMealSampleId) : AppErrors.UPDATE_FAILED.BadRequest();
+                return result > 0 ? await GetMealItemSample(mealItemSample.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> DeleteMealItemSample(Guid id)
+        {
+            try
+            {
+                if (!IsMealItemSampleExist(id))
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                var mealItemSample = await _mealItemSampleRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                _mealItemSampleRepository.Remove(mealItemSample);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? new NoContentResult() : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private bool IsMealItemSampleExist(Guid id)
+        {
+            try
+            {
+                return _mealItemSampleRepository.Any(mi => mi.Id.Equals(id));
             }
             catch (Exception)
             {

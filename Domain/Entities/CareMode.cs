@@ -9,7 +9,6 @@ namespace Domain.Entities
         {
             Birds = new HashSet<Bird>();
             MenuSammples = new HashSet<MenuSammple>();
-            Menus = new HashSet<Menu>();
             TaskSamples = new HashSet<TaskSample>();
         }
 
@@ -20,7 +19,6 @@ namespace Domain.Entities
 
         public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<MenuSammple> MenuSammples { get; set; }
-        public virtual ICollection<Menu> Menus { get; set; }
         public virtual ICollection<TaskSample> TaskSamples { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using AutoMapper;
+using Common.Extensions;
 using Common.Helpers;
 using Domain.Constants;
 using Domain.Entities;
@@ -195,13 +196,14 @@ namespace Application.Mappings
             // Meal Item
             CreateMap<MealItem, MealItemViewModel>();
             CreateMap<MealItemCreateModel, MealItem>()
-               .ForMember(dest => dest.MenuMealId, opt => opt.MapFrom(src => Guid.NewGuid()));
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
             CreateMap<MealItemUpdateModel, MealItem>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Meal Item Sample
             CreateMap<MealItemSample, MealItemSampleViewModel>();
-            CreateMap<MealItemSampleCreateModel, MealItemSample>();
+            CreateMap<MealItemSampleCreateModel, MealItemSample>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()));
             CreateMap<MealItemSampleUpdateModel, MealItemSample>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 

@@ -9,7 +9,6 @@ namespace Domain.Entities
         {
             Birds = new HashSet<Bird>();
             MenuSammples = new HashSet<MenuSammple>();
-            Menus = new HashSet<Menu>();
         }
 
         public Guid Id { get; set; }
@@ -21,6 +20,5 @@ namespace Domain.Entities
         public virtual BirdCategory BirdCategory { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<MenuSammple> MenuSammples { get; set; }
-        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

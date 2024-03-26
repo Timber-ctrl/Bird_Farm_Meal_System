@@ -2,6 +2,7 @@
 {
     public class MealItemViewModel
     {
+        public Guid Id { get; set; }
         public MenuMealViewModel MenuMeal { get; set; } = null!;
         public FoodViewModel Food { get; set; } = null!;
         public double Quantity { get; set; }

@@ -15,7 +15,9 @@ namespace Domain.Entities
         public TimeSpan From { get; set; }
         public TimeSpan To { get; set; }
         public DateTime CreateAt { get; set; }
+        public Guid MenuSampleId { get; set; }
 
+        public virtual MenuSammple MenuSample { get; set; } = null!;
         public virtual ICollection<MealItemSample> MealItemSamples { get; set; }
     }
 }

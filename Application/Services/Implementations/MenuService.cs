@@ -38,14 +38,6 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Name.Contains(filter.Name));
                 }
-                if (filter.CareModeId != null)
-                {
-                    query = query.Where(cg => cg.CareModeId.Equals(filter.CareModeId));
-                }
-                if (filter.SpeciesId != null)
-                {
-                    query = query.Where(cg => cg.SpeciesId.Equals(filter.SpeciesId));
-                }
                 var totalRows = query.Count();
                 var menus = await query.AsNoTracking()
                     .Paginate(pagination)

@@ -5,6 +5,7 @@ namespace Domain.Entities
 {
     public partial class MealItemSample
     {
+        public Guid Id { get; set; }
         public Guid MenuMealSampleId { get; set; }
         public Guid FoodId { get; set; }
         public double Quantity { get; set; }

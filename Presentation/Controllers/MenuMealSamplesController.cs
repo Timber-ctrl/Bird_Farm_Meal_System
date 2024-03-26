@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/menu-meal-samples")]
     [ApiController]
     public class MenuMealSamplesController : ControllerBase
     {
@@ -62,6 +62,20 @@ namespace Presentation.Controllers
             try
             {
                 return await _menuMealSampleService.UpdateMenuMealSample(id, model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteMenuMealSample([FromRoute] Guid id)
+        {
+            try
+            {
+                return await _menuMealSampleService.DeleteMenuMealSample(id);
             }
             catch (Exception ex)
             {
