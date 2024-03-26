@@ -80,7 +80,6 @@ namespace Application.Services.Implementations
             try
             {
                 var mealItem = _mapper.Map<MealItem>(model);
-
                 _mealItemRepository.Add(mealItem);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetCreatedMealItem(mealItem.Id) : AppErrors.CREATE_FAILED.BadRequest();
