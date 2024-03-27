@@ -43,7 +43,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTaskCheckListReport([FromForm] TaskCheckListReportCreateModel model)
+        public async Task<IActionResult> CreateTaskCheckListReport([FromBody] TaskCheckListReportCreateModel model)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace Presentation.Controllers
         }
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateTaskCheckListReport([FromRoute] Guid id, [FromForm] TaskCheckListReportUpdateModel model)
+        public async Task<IActionResult> UpdateTaskCheckListReport([FromRoute] Guid id, [FromBody] TaskCheckListReportUpdateModel model)
         {
             try
             {

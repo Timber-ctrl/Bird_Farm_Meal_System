@@ -46,7 +46,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateRepeat([FromForm] RepeatCreateModel model)
+        public async Task<IActionResult> CreateRepeat([FromBody] RepeatCreateModel model)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Presentation.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateRepeat([FromRoute] Guid id, [FromForm] RepeatUpdateModel model)
+        public async Task<IActionResult> UpdateRepeat([FromRoute] Guid id, [FromBody] RepeatUpdateModel model)
         {
             try
             {

@@ -45,7 +45,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCareMode([FromForm] CareModeCreateModel model)
+        public async Task<IActionResult> CreateCareMode([FromBody] CareModeCreateModel model)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Presentation.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateCareMode([FromRoute] Guid id, [FromForm] CareModeUpdateModel model)
+        public async Task<IActionResult> UpdateCareMode([FromRoute] Guid id, [FromBody] CareModeUpdateModel model)
         {
             try
             {

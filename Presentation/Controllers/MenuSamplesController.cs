@@ -47,7 +47,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMenuSample([FromForm] MenuSampleCreateModel model)
+        public async Task<IActionResult> CreateMenuSample([FromBody] MenuSampleCreateModel model)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Presentation.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateMenuSample([FromRoute] Guid id, [FromForm] MenuSampleUpdateModel model)
+        public async Task<IActionResult> UpdateMenuSample([FromRoute] Guid id, [FromBody] MenuSampleUpdateModel model)
         {
             try
             {

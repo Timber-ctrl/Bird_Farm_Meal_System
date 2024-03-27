@@ -45,7 +45,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateUnitOfMeasurements([FromForm] UnitOfMeasurementCreateModel model)
+        public async Task<IActionResult> CreateUnitOfMeasurements([FromBody] UnitOfMeasurementCreateModel model)
         {
             try
             {
@@ -58,7 +58,7 @@ namespace Presentation.Controllers
         }
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateUnitOfMeasurements([FromRoute] Guid id, [FromForm] UnitOfMeasurementUpdateModel model)
+        public async Task<IActionResult> UpdateUnitOfMeasurements([FromRoute] Guid id, [FromBody] UnitOfMeasurementUpdateModel model)
         {
             try
             {

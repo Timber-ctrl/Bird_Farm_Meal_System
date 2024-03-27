@@ -414,6 +414,9 @@ namespace Domain.Entities
 
                 entity.ToTable("MealItem");
 
+                entity.HasIndex(e => e.Id, "IX_MealItemId")
+                    .IsUnique();
+
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.MealItems)
                     .HasForeignKey(d => d.FoodId)
@@ -433,6 +436,9 @@ namespace Domain.Entities
                     .HasName("PK__MealItem__DDD6D92C3FE05996");
 
                 entity.ToTable("MealItemSample");
+
+                entity.HasIndex(e => e.Id, "IX_MealItemSample")
+                    .IsUnique();
 
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.MealItemSamples)

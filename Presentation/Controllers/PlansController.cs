@@ -47,7 +47,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePlan([FromForm] PlanCreateModel model)
+        public async Task<IActionResult> CreatePlan([FromBody] PlanCreateModel model)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace Presentation.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdatePlan([FromRoute] Guid id, [FromForm] PlanUpdateModel model)
+        public async Task<IActionResult> UpdatePlan([FromRoute] Guid id, [FromBody] PlanUpdateModel model)
         {
             try
             {

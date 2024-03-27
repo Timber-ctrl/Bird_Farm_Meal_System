@@ -9,5 +9,8 @@
         public const string CREATE_FAILED = "Cannot create new object";
         public const string UPDATE_FAILED = "Cannot update the object";
         public const string MANAGER_HAS_FARM = "This manager already manages the farm";
+
+        public const string DUPLICATE_MEAL_ITEM= "The meal item already has this food";
+
     }
 }

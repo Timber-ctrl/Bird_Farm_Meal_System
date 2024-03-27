@@ -42,7 +42,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTask([FromForm] TaskCreateModel model)
+        public async Task<IActionResult> CreateTask([FromBody] TaskCreateModel model)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Presentation.Controllers
         }
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateTask([FromRoute] Guid id, [FromForm] TaskUpdateModel model)
+        public async Task<IActionResult> UpdateTask([FromRoute] Guid id, [FromBody] TaskUpdateModel model)
         {
             try
             {

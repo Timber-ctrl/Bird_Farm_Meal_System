@@ -45,7 +45,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFoodCategory([FromForm] FoodCategoryCreateModel model)
+        public async Task<IActionResult> CreateFoodCategory([FromBody] FoodCategoryCreateModel model)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace Presentation.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateFoodCategory([FromRoute] Guid id, [FromForm] FoodCategoryUpdateModel model)
+        public async Task<IActionResult> UpdateFoodCategory([FromRoute] Guid id, [FromBody] FoodCategoryUpdateModel model)
         {
             try
             {

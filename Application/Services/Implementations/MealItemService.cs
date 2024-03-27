@@ -64,7 +64,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var mealItem = await _mealItemRepository.Where(cg => cg.MenuMealId.Equals(id)).AsNoTracking()
+                var mealItem = await _mealItemRepository.Where(cg => cg.Id.Equals(id)).AsNoTracking()
                     .ProjectTo<MealItemViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync() ?? null!;
                 return mealItem != null ? mealItem.Created() : AppErrors.NOT_FOUND.NotFound();
@@ -79,6 +79,10 @@ namespace Application.Services.Implementations
         {
             try
             {
+                if (_mealItemRepository.Any(mi => mi.MenuMealId.Equals(model.MenuMealId) && mi.FoodId.Equals(model.FoodId)))
+                {
+                    return AppErrors.DUPLICATE_MEAL_ITEM.Conflict();
+                }
                 var mealItem = _mapper.Map<MealItem>(model);
                 _mealItemRepository.Add(mealItem);
                 var result = await _unitOfWork.SaveChangesAsync();
