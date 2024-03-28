@@ -28,6 +28,7 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetTask([FromRoute] Guid id)
@@ -41,6 +42,7 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateTask([FromBody] TaskCreateModel model)
         {
@@ -53,6 +55,35 @@ namespace Presentation.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("assign-staffs")]
+        public async Task<IActionResult> AssignStaff([FromBody] AssignStaffCreateModel model)
+        {
+            try
+            {
+                return await _taskService.AssignStaff(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("assign-staffs/{id}")]
+        public async Task<IActionResult> DeleteAssignStaff([FromRoute] Guid id, [FromQuery] Guid staffId)
+        {
+            try
+            {
+                return await _taskService.DeleteAssignStaff(id, staffId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateTask([FromRoute] Guid id, [FromBody] TaskUpdateModel model)

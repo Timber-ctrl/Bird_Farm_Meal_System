@@ -11,6 +11,8 @@ namespace Application.Services.Interfaces
         Task<IActionResult> GetTasks(TaskFilterModel filter, PaginationRequestModel pagination);
         Task<IActionResult> GetTask(Guid id);
         Task<IActionResult> CreateTask(TaskCreateModel model);
+        Task<IActionResult> AssignStaff(AssignStaffCreateModel model);
+        Task<IActionResult> DeleteAssignStaff(Guid taskId, Guid staffId);
         Task<IActionResult> UpdateTask(Guid id, TaskUpdateModel model);
     }
 }

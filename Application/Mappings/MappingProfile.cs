@@ -256,6 +256,8 @@ namespace Application.Mappings
 
             // Assign Staff
             CreateMap<AssignStaff, AssignStaffViewModel>();
+            CreateMap<AssignStaffCreateModel, AssignStaff>()
+               .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
         }
     }
 }
