@@ -85,7 +85,6 @@ namespace Application.Services.Implementations
                     .ProjectTo<TaskViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync() ?? null!;
                 return task != null ? task.Created() : AppErrors.NOT_FOUND.NotFound();
-
             }
             catch (Exception)
             {

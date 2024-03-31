@@ -18,6 +18,7 @@ namespace Domain.Entities
         public string Description { get; set; } = null!;
         public Guid ManagerId { get; set; }
         public DateTime Deadline { get; set; }
+        public DateTime StartAt { get; set; }
         public DateTime CreateAt { get; set; }
         public string Status { get; set; } = null!;
 

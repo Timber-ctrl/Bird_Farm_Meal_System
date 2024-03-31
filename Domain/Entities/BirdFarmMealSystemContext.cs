@@ -565,8 +565,6 @@ namespace Domain.Entities
 
                 entity.Property(e => e.Type).HasMaxLength(256);
 
-                entity.Property(e => e.Until).HasColumnType("datetime");
-
                 entity.HasOne(d => d.Task)
                     .WithMany(p => p.Repeats)
                     .HasForeignKey(d => d.TaskId)
@@ -670,6 +668,8 @@ namespace Domain.Entities
 
                 entity.Property(e => e.Deadline).HasColumnType("datetime");
 
+                entity.Property(e => e.StartAt).HasColumnType("datetime");
+
                 entity.Property(e => e.Status).HasMaxLength(256);
 
                 entity.HasOne(d => d.Cage)
@@ -698,7 +698,6 @@ namespace Domain.Entities
                 entity.HasOne(d => d.Asignee)
                     .WithMany(p => p.TaskCheckLists)
                     .HasForeignKey(d => d.AsigneeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__TaskCheck__Asign__02FC7413");
 
                 entity.HasOne(d => d.Task)
