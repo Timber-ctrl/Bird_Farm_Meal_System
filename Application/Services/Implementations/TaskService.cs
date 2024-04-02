@@ -77,6 +77,22 @@ namespace Application.Services.Implementations
             }
         }
 
+        public async Task<IActionResult> GetStaffTask(Guid id)
+        {
+            try
+            {
+                var task = await _taskRepository.Where(cg => cg.AssignStaffs.Any(at => at.StaffId.Equals(id)))
+                    .AsNoTracking()
+                    .ProjectTo<TaskViewModel>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync() ?? null!;
+                return task != null ? task.Ok() : AppErrors.NOT_FOUND.NotFound();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IActionResult> GetCreatedTask(Guid id)
         {
             try

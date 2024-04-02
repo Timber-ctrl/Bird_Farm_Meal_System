@@ -43,6 +43,20 @@ namespace Presentation.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("staffs/{id}")]
+        public async Task<IActionResult> GetStaffTask([FromRoute] Guid id)
+        {
+            try
+            {
+                return await _taskService.GetStaffTask(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateTask([FromBody] TaskCreateModel model)
         {
