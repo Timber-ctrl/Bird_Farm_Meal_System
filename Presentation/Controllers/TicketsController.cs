@@ -44,7 +44,7 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateTicket([FromBody] TicketCreateModel model)
+        public async Task<IActionResult> CreateTicket([FromForm] TicketCreateModel model)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Presentation.Controllers
         }
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateTicket([FromRoute] Guid id, [FromBody] TicketUpdateModel model)
+        public async Task<IActionResult> UpdateTicket([FromRoute] Guid id, [FromForm] TicketUpdateModel model)
         {
             try
             {
