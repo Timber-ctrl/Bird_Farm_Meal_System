@@ -426,7 +426,7 @@ namespace Domain.Entities
                 entity.HasOne(d => d.MenuMeal)
                     .WithMany(p => p.MealItems)
                     .HasForeignKey(d => d.MenuMealId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__MealItem__MenuMe__6EF57B66");
             });
 
