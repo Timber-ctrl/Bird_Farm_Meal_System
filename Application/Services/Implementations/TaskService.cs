@@ -14,7 +14,6 @@ using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
-using System.Threading.Tasks;
 
 namespace Application.Services.Implementations
 {

@@ -1,6 +1,5 @@
 ﻿
 using AutoMapper;
-using Common.Extensions;
 using Common.Helpers;
 using Domain.Constants;
 using Domain.Entities;
@@ -132,6 +131,14 @@ namespace Application.Mappings
                    CreateAt = DateTimeHelper.VnNow,
                    TaskId = dest.Id,
                }) : null!))
+                .ForMember(dest => dest.Repeats, opt => opt.MapFrom((src, dest) => src.Repeats != null ? src.Repeats.Select(cl =>
+               new Repeat
+               {
+                   Id = Guid.NewGuid(),
+                   TaskId = dest.Id,
+                   Time = cl.Time,
+                   Type = cl.Type
+               }) : null!))
                .ForMember(dest => dest.TaskCheckLists, opt => opt.MapFrom((src, dest) => src.CheckLists != null ? src.CheckLists.Select(cl =>
                new TaskCheckList
                {
@@ -139,7 +146,7 @@ namespace Application.Mappings
                    CreateAt = DateTimeHelper.VnNow,
                    TaskId = dest.Id,
                    AsigneeId = cl.AsigneeId,
-                   Order =  cl.Order,
+                   Order = cl.Order,
                    Title = cl.Title,
                    Status = false
                }) : null!));

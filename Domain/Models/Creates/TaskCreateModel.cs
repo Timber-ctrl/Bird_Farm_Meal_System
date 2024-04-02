@@ -12,6 +12,7 @@ namespace Domain.Models.Creates
         public string Status { get; set; } = null!;
         public DateTime StartAt { get; set; }
         public ICollection<Guid>? AssigneeIds { get; set; }
+        public ICollection<RepeatCreateModel>? Repeats { get; set; }
         public ICollection<TaskCheckListCreateModel> CheckLists { get; set; } = new List<TaskCheckListCreateModel>();
     }
 }
