@@ -1,8 +1,11 @@
 ﻿using Application.Services.Interfaces;
+using Common.Extensions;
+using Domain.Constants;
 using Domain.Models.Creates;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
 using Domain.Models.Updates;
+using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
@@ -44,12 +47,14 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("staffs/{id}")]
+        [Authorize(UserRoles.STAFF)]
+        [Route("staffs")]
         public async Task<IActionResult> GetStaffTask([FromRoute] Guid id)
         {
             try
             {
-                return await _taskService.GetStaffTask(id);
+                var auth = this.GetAuthenticatedUser();
+                return await _taskService.GetStaffTask(auth.Id);
             }
             catch (Exception ex)
             {
