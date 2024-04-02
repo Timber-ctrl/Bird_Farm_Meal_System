@@ -49,7 +49,7 @@ namespace Presentation.Controllers
         [HttpGet]
         [Authorize(UserRoles.STAFF)]
         [Route("staffs")]
-        public async Task<IActionResult> GetStaffTask([FromRoute] Guid id)
+        public async Task<IActionResult> GetStaffTask()
         {
             try
             {
