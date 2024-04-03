@@ -10,6 +10,7 @@ namespace Domain.Models.Creates
     public class TicketCreateModel
     {
         public string TicketCategory { get; set; } = null!;
+        public string Title { get; set; } = null!;
         public Guid CreatorId { get; set; }
         public string Priority { get; set; } = null!;
         public Guid? AssigneeId { get; set; }

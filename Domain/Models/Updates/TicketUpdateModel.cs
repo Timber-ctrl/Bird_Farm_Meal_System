@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Models.Updates
 {
@@ -11,6 +6,7 @@ namespace Domain.Models.Updates
     {
         public string? TicketCategory { get; set; } = null!;
         public Guid? CreatorId { get; set; }
+        public string? Title { get; set; }
         public string? Priority { get; set; } = null!;
         public Guid? AssigneeId { get; set; }
         public Guid? CageId { get; set; }

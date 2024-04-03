@@ -8,6 +8,7 @@ namespace Domain.Entities
         public Guid Id { get; set; }
         public string TicketCategory { get; set; } = null!;
         public Guid CreatorId { get; set; }
+        public string Title { get; set; } = null!;
         public string Priority { get; set; } = null!;
         public Guid? AssigneeId { get; set; }
         public Guid? CageId { get; set; }

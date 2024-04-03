@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public string TicketCategory { get; set; } = null!;
+        public string Title { get; set; } = null!;
         public StaffViewModel Creator { get; set; } = null!;
         public string Priority { get; set; } = null!;
         public StaffViewModel Assignee { get; set; } = null!;
