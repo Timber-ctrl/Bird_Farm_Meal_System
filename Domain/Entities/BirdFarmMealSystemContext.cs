@@ -28,6 +28,7 @@ namespace Domain.Entities
         public virtual DbSet<Farm> Farms { get; set; } = null!;
         public virtual DbSet<Food> Foods { get; set; } = null!;
         public virtual DbSet<FoodCategory> FoodCategories { get; set; } = null!;
+        public virtual DbSet<FoodReport> FoodReports { get; set; } = null!;
         public virtual DbSet<Hash> Hashes { get; set; } = null!;
         public virtual DbSet<Job> Jobs { get; set; } = null!;
         public virtual DbSet<JobParameter> JobParameters { get; set; } = null!;
@@ -171,6 +172,11 @@ namespace Domain.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bird__CategoryId__4BAC3F29");
 
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.Birds)
+                    .HasForeignKey(d => d.MenuId)
+                    .HasConstraintName("FK_Bird_Menu");
+
                 entity.HasOne(d => d.Species)
                     .WithMany(p => p.Birds)
                     .HasForeignKey(d => d.SpeciesId)
@@ -305,6 +311,29 @@ namespace Domain.Entities
                 entity.Property(e => e.Name).HasMaxLength(256);
             });
 
+            modelBuilder.Entity<FoodReport>(entity =>
+            {
+                entity.ToTable("FoodReport");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Food)
+                    .WithMany(p => p.FoodReports)
+                    .HasForeignKey(d => d.FoodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__FoodRepor__FoodI__2CBDA3B5");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.FoodReports)
+                    .HasForeignKey(d => d.StaffId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__FoodRepor__Staff__2BC97F7C");
+            });
+
             modelBuilder.Entity<Hash>(entity =>
             {
                 entity.HasKey(e => new { e.Key, e.Field })
@@ -426,7 +455,6 @@ namespace Domain.Entities
                 entity.HasOne(d => d.MenuMeal)
                     .WithMany(p => p.MealItems)
                     .HasForeignKey(d => d.MenuMealId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__MealItem__MenuMe__6EF57B66");
             });
 
@@ -672,12 +700,6 @@ namespace Domain.Entities
 
                 entity.Property(e => e.Status).HasMaxLength(256);
 
-                entity.HasOne(d => d.Cage)
-                    .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.CageId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Task__CageId__787EE5A0");
-
                 entity.HasOne(d => d.Manager)
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.ManagerId)
@@ -788,6 +810,10 @@ namespace Domain.Entities
                 entity.Property(e => e.Status).HasMaxLength(256);
 
                 entity.Property(e => e.TicketCategory).HasMaxLength(256);
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(256)
+                    .IsFixedLength();
 
                 entity.HasOne(d => d.Assignee)
                     .WithMany(p => p.TicketAssignees)

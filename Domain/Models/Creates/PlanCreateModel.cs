@@ -13,6 +13,5 @@ namespace Domain.Models.Creates
         public DateTime To { get; set; }
         public Guid MenuId { get; set; }
         public Guid CageId { get; set; }
-
     }
 }

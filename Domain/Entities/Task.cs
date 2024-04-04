@@ -13,7 +13,6 @@ namespace Domain.Entities
         }
 
         public Guid Id { get; set; }
-        public Guid CageId { get; set; }
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public Guid ManagerId { get; set; }
@@ -22,7 +21,6 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
         public string Status { get; set; } = null!;
 
-        public virtual Cage Cage { get; set; } = null!;
         public virtual Manager Manager { get; set; } = null!;
         public virtual ICollection<AssignStaff> AssignStaffs { get; set; }
         public virtual ICollection<Repeat> Repeats { get; set; }

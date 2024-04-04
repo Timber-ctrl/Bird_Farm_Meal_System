@@ -9,7 +9,6 @@ namespace Domain.Entities
         {
             Birds = new HashSet<Bird>();
             Plans = new HashSet<Plan>();
-            Tasks = new HashSet<Task>();
             Tickets = new HashSet<Ticket>();
         }
 
@@ -28,7 +27,6 @@ namespace Domain.Entities
         public virtual Area Area { get; set; } = null!;
         public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
-        public virtual ICollection<Task> Tasks { get; set; }
         public virtual ICollection<Ticket> Tickets { get; set; }
     }
 }

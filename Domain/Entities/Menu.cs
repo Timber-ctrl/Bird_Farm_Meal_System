@@ -7,6 +7,7 @@ namespace Domain.Entities
     {
         public Menu()
         {
+            Birds = new HashSet<Bird>();
             MenuMeals = new HashSet<MenuMeal>();
             Plans = new HashSet<Plan>();
         }
@@ -15,6 +16,7 @@ namespace Domain.Entities
         public string Name { get; set; } = null!;
         public DateTime CreateAt { get; set; }
 
+        public virtual ICollection<Bird> Birds { get; set; }
         public virtual ICollection<MenuMeal> MenuMeals { get; set; }
         public virtual ICollection<Plan> Plans { get; set; }
     }
