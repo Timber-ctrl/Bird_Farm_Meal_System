@@ -72,15 +72,17 @@ namespace Application.Services.Implementations
             }
         }
 
-        public async Task<IActionResult> GetStaffTask(Guid id)
+        public async Task<IActionResult> GetStaffTask(Guid id, PaginationRequestModel pagination)
         {
             try
             {
-                var task = await _taskRepository.Where(cg => cg.AssignStaffs.Any(at => at.StaffId.Equals(id)))
-                    .AsNoTracking()
+                var query = _taskRepository.Where(cg => cg.AssignStaffs.Any(at => at.StaffId.Equals(id)));
+                var totalRow = query.Count();
+                var task = await query.AsNoTracking()
+                    .Paginate(pagination)
                     .ProjectTo<TaskViewModel>(_mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync() ?? null!;
-                return task != null ? task.Ok() : AppErrors.NOT_FOUND.NotFound();
+                    .ToListAsync();
+                return task.ToPaged(pagination, totalRow).Ok();
             }
             catch (Exception)
             {

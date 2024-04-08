@@ -49,12 +49,12 @@ namespace Presentation.Controllers
         [HttpGet]
         [Authorize(UserRoles.STAFF)]
         [Route("staffs")]
-        public async Task<IActionResult> GetStaffTask()
+        public async Task<IActionResult> GetStaffTask([FromQuery] PaginationRequestModel pagination)
         {
             try
             {
                 var auth = this.GetAuthenticatedUser();
-                return await _taskService.GetStaffTask(auth.Id);
+                return await _taskService.GetStaffTask(auth.Id, pagination);
             }
             catch (Exception ex)
             {
