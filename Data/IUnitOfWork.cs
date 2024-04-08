@@ -49,7 +49,8 @@ namespace Data
         public ITaskSampleCheckListRepository TaskSampleCheckList { get; }
         //get Ticket Repository
         public ITicketRepository Ticket { get; }
-
+        // get FoodReport Repository
+        public IFoodReportRepository FoodReport { get; }
 
 
         void BeginTransaction();
