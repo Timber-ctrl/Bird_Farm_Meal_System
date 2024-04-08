@@ -5,6 +5,6 @@ namespace Domain.Models.Filters
     public class TicketFilterModel
     {
         public string? TicketCategory { get; set; } = null!;
-        public Guid? CageId { get; set; }
+        public string? Status { get; set; } = null!;
     }
 }
