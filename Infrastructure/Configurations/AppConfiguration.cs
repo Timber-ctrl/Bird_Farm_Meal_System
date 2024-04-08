@@ -45,6 +45,7 @@ namespace Infrastructure.Configurations
             services.AddScoped<IMenuSampleService, MenuSampleService>();
             services.AddScoped<IPlanService, PlanService>();
             services.AddScoped<IRepeatService, RepeatService>();
+            services.AddScoped<IFoodReportService, FoodReportService>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
         }

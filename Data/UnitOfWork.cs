@@ -60,6 +60,8 @@ namespace Data
         public ITaskSampleCheckListRepository _taskSampleCheckList = null!;
         //Ticket
         public ITicketRepository _ticket = null!;
+        //FoodReport
+        public IFoodReportRepository _foodReport = null!;
 
         public IStaffRepository Staff
         {
@@ -220,7 +222,10 @@ namespace Data
         {
             get { return _ticket ??= new TicketRepository(_context); }
         }
-
+        public IFoodReportRepository FoodReport
+        {
+            get { return _foodReport ??= new FoodReportRepository(_context); }
+        }
 
         public void BeginTransaction()
         {

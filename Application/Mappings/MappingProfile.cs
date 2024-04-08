@@ -265,6 +265,14 @@ namespace Application.Mappings
             CreateMap<AssignStaff, AssignStaffViewModel>();
             CreateMap<AssignStaffCreateModel, AssignStaff>()
                .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+
+            // Food Report
+            CreateMap<FoodReport, FoodReportViewModel>();
+            CreateMap<FoodReportCreateModel, FoodReport>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
+            CreateMap<FoodReportUpdateModel, FoodReport>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

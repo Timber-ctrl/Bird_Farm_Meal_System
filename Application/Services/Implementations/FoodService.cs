@@ -35,6 +35,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Name.Contains(filter.Name));
                 }
+                if (filter.Status != null)
+                {
+                    query = query.Where(cg => cg.Status.Contains(filter.Status));
+                }
                 var totalRows = query.Count();
                 var foods = await query.AsNoTracking()
                     .Paginate(pagination)
