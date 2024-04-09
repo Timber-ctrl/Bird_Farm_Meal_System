@@ -19,10 +19,13 @@ namespace Application.Services.Implementations
     public class FoodReportService : BaseService, IFoodReportService
     {
         private readonly IFoodReportRepository _foodReportRepository;
+        private readonly IFoodRepository _foodRepository;
         public FoodReportService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
             _foodReportRepository = unitOfWork.FoodReport;
+            _foodRepository = unitOfWork.Food;
         }
+
         public async Task<IActionResult> GetFoodReports(FoodReportFilterModel filter, PaginationRequestModel pagination)
         {
             try
@@ -52,6 +55,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> GetFoodReport(Guid id)
         {
             try
@@ -66,6 +70,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         private async Task<IActionResult> GetCreatedFoodReport(Guid id)
         {
             try
@@ -80,12 +85,17 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> CreateFoodReport(FoodReportCreateModel model)
         {
             try
             {
                 var foodReport = _mapper.Map<FoodReport>(model);
 
+                var food = await _foodRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(model.FoodId));
+                food.Quantity = (double)model.RemainQuantity;
+
+                _foodRepository.Update(food);
                 _foodReportRepository.Add(foodReport);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetCreatedFoodReport(foodReport.Id) : AppErrors.CREATE_FAILED.BadRequest();
@@ -95,6 +105,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> UpdateFoodReport(Guid id, FoodReportUpdateModel model)
         {
             try
@@ -103,6 +114,13 @@ namespace Application.Services.Implementations
                 if (foodReport == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
+                }
+
+                if (model.RemainQuantity != null)
+                {
+                    var food = await _foodRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(model.FoodId));
+                    food.Quantity = (double)model.RemainQuantity;
+                    _foodRepository.Update(food);
                 }
 
                 _mapper.Map(model, foodReport);
