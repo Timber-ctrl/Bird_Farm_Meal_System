@@ -107,7 +107,6 @@ namespace Application.Services.Implementations
 
         public async Task<IActionResult> CreateTask(TaskCreateModel model)
         {
-
             try
             {
                 var task = _mapper.Map<Task>(model);
