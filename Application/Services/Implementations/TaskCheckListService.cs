@@ -117,19 +117,76 @@ namespace Application.Services.Implementations
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
-                if (model.Status != null && model.Status == true && await IsTaskProgress(id))
-                {
-                    var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
-                    if (task != null)
-                    {
-                        task.Status = TaskStatuses.IN_PROGRESS;
-                        _taskRepository.Update(task);
-                    }
-                }
+                await UpdateTaskStatus(id, model);
                 _mapper.Map(model, taskCheckList);
                 _taskCheckListRepository.Update(taskCheckList);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetTaskCheckList(taskCheckList.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async System.Threading.Tasks.Task UpdateTaskStatus(Guid id, TaskCheckListUpdateModel model)
+        {
+            try
+            {
+                if (model.Status != null && model.Status == true)
+                {
+                    if (await IsTaskProgress(id) == true)
+                    {
+                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
+                        if (task != null)
+                        {
+                            task.Status = TaskStatuses.IN_PROGRESS;
+                            _taskRepository.Update(task);
+                        }
+                    }
+                    if (await IsTaskFinished(id) == true)
+                    {
+                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
+                        if (task != null)
+                        {
+                            task.Status = TaskStatuses.WORK_FINISHED;
+                            _taskRepository.Update(task);
+                        }
+                    }
+                }
+                if (model.Status != null && model.Status == false)
+                {
+                    if (await IsTaskTodo(id) == true)
+                    {
+                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
+                        if (task != null)
+                        {
+                            task.Status = TaskStatuses.TO_DO;
+                            _taskRepository.Update(task);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task<bool> IsTaskTodo(Guid checklistId)
+        {
+            try
+            {
+                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(checklistId))).FirstOrDefaultAsync();
+                if (task != null)
+                {
+                    var doneChecklists = task.TaskCheckLists.Where(cl => cl.Status).ToList();
+                    if (doneChecklists.Count == 1)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             catch (Exception)
             {
@@ -145,6 +202,27 @@ namespace Application.Services.Implementations
                 if (task != null && task.TaskCheckLists.All(cl => !cl.Status))
                 {
                     return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async Task<bool> IsTaskFinished(Guid checklistId)
+        {
+            try
+            {
+                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(checklistId))).FirstOrDefaultAsync();
+                if (task != null)
+                {
+                    var doneChecklists = task.TaskCheckLists.Where(cl => cl.Status).ToList();
+                    if (task.TaskCheckLists.Count == doneChecklists.Count + 1)
+                    {
+                        return true;
+                    }
                 }
                 return false;
             }
