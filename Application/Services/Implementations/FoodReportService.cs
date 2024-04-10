@@ -31,6 +31,10 @@ namespace Application.Services.Implementations
             try
             {
                 var query = _foodReportRepository.GetAll();
+                if (filter.Name != null)
+                {
+                    query = query.Where(cg => cg.Food.Name.Contains(filter.Name));
+                }
                 if (filter.StaffId != null)
                 {
                     query = query.Where(cg => cg.StaffId.Equals(filter.StaffId));
