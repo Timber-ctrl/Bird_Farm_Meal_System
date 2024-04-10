@@ -117,6 +117,10 @@ namespace Application.Services.Implementations
                 {
                     ticket.Image = await _cloudStorageService.Upload(Guid.NewGuid(), model.Image);
                 }
+                if (model.AssigneeId == null)
+                {
+                    ticket.AssigneeId = null;
+                }
                 _mapper.Map(model, ticket);
                 _ticketRepository.Update(ticket);
                 var result = await _unitOfWork.SaveChangesAsync();
