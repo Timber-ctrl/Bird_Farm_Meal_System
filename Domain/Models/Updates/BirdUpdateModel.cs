@@ -11,6 +11,7 @@ namespace Domain.Models.Updates
         public string? Code { get; set; }
         public IFormFile? Thumbnail { get; set; }
         public Guid? CageId { get; set; }
+        public Guid? MenuId { get; set; }
         public Guid? SpeciesId { get; set; }
         public Guid? CareModeId { get; set; }
         public Guid? CategoryId { get; set; }
