@@ -133,7 +133,9 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
+                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id)))
+                    .Include(ta => ta.TaskCheckLists)
+                    .FirstOrDefaultAsync();
                 if (task == null) {
                     return;
                 }
@@ -145,7 +147,7 @@ namespace Application.Services.Implementations
                 {
                     task.Status = TaskStatuses.TO_DO;
                 }
-                if (task.TaskCheckLists.All(cl => cl.Status) && task.TaskCheckLists.Any(cl => cl.Status))
+                if (!task.TaskCheckLists.All(cl => cl.Status) && task.TaskCheckLists.Any(cl => cl.Status))
                 {
                     task.Status = TaskStatuses.IN_PROGRESS;
                 }
