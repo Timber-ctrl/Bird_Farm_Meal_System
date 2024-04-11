@@ -117,10 +117,10 @@ namespace Application.Services.Implementations
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
-                await UpdateTaskStatus(id, model);
                 _mapper.Map(model, taskCheckList);
                 _taskCheckListRepository.Update(taskCheckList);
                 var result = await _unitOfWork.SaveChangesAsync();
+                await UpdateTaskStatus(id);
                 return result > 0 ? await GetTaskCheckList(taskCheckList.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
@@ -129,102 +129,28 @@ namespace Application.Services.Implementations
             }
         }
 
-        private async System.Threading.Tasks.Task UpdateTaskStatus(Guid id, TaskCheckListUpdateModel model)
+        private async System.Threading.Tasks.Task UpdateTaskStatus(Guid id)
         {
             try
             {
-                if (model.Status != null && model.Status == true)
-                {
-                    if (await IsTaskProgress(id) == true)
-                    {
-                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
-                        if (task != null)
-                        {
-                            task.Status = TaskStatuses.IN_PROGRESS;
-                            _taskRepository.Update(task);
-                        }
-                    }
-                    if (await IsTaskFinished(id) == true)
-                    {
-                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
-                        if (task != null)
-                        {
-                            task.Status = TaskStatuses.WORK_FINISHED;
-                            _taskRepository.Update(task);
-                        }
-                    }
+                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
+                if (task == null) {
+                    return;
                 }
-                if (model.Status != null && model.Status == false)
+                if (task.TaskCheckLists.All(cl => cl.Status))
                 {
-                    if (await IsTaskTodo(id) == true)
-                    {
-                        var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(id))).FirstOrDefaultAsync();
-                        if (task != null)
-                        {
-                            task.Status = TaskStatuses.TO_DO;
-                            _taskRepository.Update(task);
-                        }
-                    }
+                    task.Status = TaskStatuses.WORK_FINISHED;
                 }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private async Task<bool> IsTaskTodo(Guid checklistId)
-        {
-            try
-            {
-                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(checklistId))).FirstOrDefaultAsync();
-                if (task != null)
+                if (task.TaskCheckLists.All(cl => !cl.Status))
                 {
-                    var doneChecklists = task.TaskCheckLists.Where(cl => cl.Status).ToList();
-                    if (doneChecklists.Count == 1)
-                    {
-                        return true;
-                    }
+                    task.Status = TaskStatuses.TO_DO;
                 }
-                return false;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private async Task<bool> IsTaskProgress(Guid checklistId)
-        {
-            try
-            {
-                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(checklistId))).FirstOrDefaultAsync();
-                if (task != null && task.TaskCheckLists.All(cl => !cl.Status))
+                if (task.TaskCheckLists.All(cl => cl.Status) && task.TaskCheckLists.Any(cl => cl.Status))
                 {
-                    return true;
+                    task.Status = TaskStatuses.IN_PROGRESS;
                 }
-                return false;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        private async Task<bool> IsTaskFinished(Guid checklistId)
-        {
-            try
-            {
-                var task = await _taskRepository.Where(ta => ta.TaskCheckLists.Any(cl => cl.Id.Equals(checklistId))).FirstOrDefaultAsync();
-                if (task != null)
-                {
-                    var doneChecklists = task.TaskCheckLists.Where(cl => cl.Status).ToList();
-                    if (task.TaskCheckLists.Count == doneChecklists.Count + 1)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                _taskRepository.Update(task);
+                await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception)
             {
