@@ -9,6 +9,7 @@ using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Authentications;
 using Domain.Models.Views;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,10 +45,30 @@ namespace Application.Services.Implementations
             try
             {
                 var manager = await _managerRepository.Where(ma => ma.Id.Equals(id))
-                    .ProjectTo<ManagerViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync();
+                var authModel = _mapper.Map<AuthModel>(manager);
+                authModel.Role = UserRoles.MANAGER;
+                var accessToken = _authService.GenerateJwtToken(authModel);
 
-                return manager != null ? manager.Ok() : AppErrors.NOT_FOUND.NotFound();
+                var response = new AuthResponseModel()
+                {
+                    Access_token = accessToken,
+                    User = new UserDataModel
+                    {
+                        Uuid = manager.Id,
+                        Role = UserRoles.MANAGER,
+                        Data = new InfoManager
+                        {
+                            DisplayName = manager.Name,
+                            PhotoURL = manager.AvatarUrl,
+                            Email = manager.Email,
+                            Phone = manager.Phone,
+
+                        }
+                    }
+                };
+
+                return response != null ? response.Ok() : AppErrors.NOT_FOUND.NotFound();
             }
             catch (Exception)
             {
@@ -83,7 +104,7 @@ namespace Application.Services.Implementations
                 var createdManager = await GetManager(manager.Id);
                 var authModel = _mapper.Map<AuthModel>(createdManager);
                 authModel.Role = UserRoles.MANAGER;
-                var accessToken =_authService.GenerateJwtToken(authModel);  
+                var accessToken = _authService.GenerateJwtToken(authModel);
                 var response = new AuthResponseModel()
                 {
                     Access_token = accessToken,
