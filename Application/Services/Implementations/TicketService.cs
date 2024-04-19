@@ -117,6 +117,10 @@ namespace Application.Services.Implementations
                 {
                     ticket.Image = await _cloudStorageService.Upload(Guid.NewGuid(), model.Image);
                 }
+                if (model.ResultImage != null)
+                {
+                    ticket.ResultImage = await _cloudStorageService.Upload(Guid.NewGuid(), model.ResultImage);
+                }
                 if (model.AssigneeId == null)
                 {
                     ticket.AssigneeId = null;

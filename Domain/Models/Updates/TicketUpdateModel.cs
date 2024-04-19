@@ -12,6 +12,8 @@ namespace Domain.Models.Updates
         public Guid? CageId { get; set; }
         public string? Description { get; set; } = null!;
         public IFormFile? Image { get; set; } = null!;
+        public IFormFile? ResultImage { get; set; } = null!;
+        public string? ResultDescription { get; set; } = null!;
         public string? Status { get; set; } = null!;
     }
 }
