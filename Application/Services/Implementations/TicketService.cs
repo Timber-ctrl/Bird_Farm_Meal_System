@@ -109,6 +109,7 @@ namespace Application.Services.Implementations
             try
             {
                 var ticket = await _ticketRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                _mapper.Map(model, ticket);
                 if (ticket == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
@@ -125,7 +126,6 @@ namespace Application.Services.Implementations
                 {
                     ticket.AssigneeId = null;
                 }
-                _mapper.Map(model, ticket);
                 _ticketRepository.Update(ticket);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetTicket(ticket.Id) : AppErrors.UPDATE_FAILED.BadRequest();
