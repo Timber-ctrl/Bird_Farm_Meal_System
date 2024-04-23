@@ -14,6 +14,7 @@ using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using System.Linq;
 
 namespace Application.Services.Implementations
 {
@@ -34,6 +35,10 @@ namespace Application.Services.Implementations
                 if (filter.Title != null)
                 {
                     query = query.Where(cg => cg.Title.Contains(filter.Title));
+                }
+                if (filter.StaffId != null)
+                {
+                    query = query.Where(cg => cg.AssignStaffs.Any(st => st.StaffId.Equals(filter.StaffId)));
                 }
                 if (filter.Status != null)
                 {

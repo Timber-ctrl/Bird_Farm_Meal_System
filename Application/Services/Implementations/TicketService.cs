@@ -1,24 +1,18 @@
 ﻿using Application.Services.Interfaces;
 using AutoMapper;
-using Data.Repositories.Interfaces;
+using AutoMapper.QueryableExtensions;
+using Common.Errors;
+using Common.Extensions;
 using Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data.Repositories.Implementations;
+using Data.Repositories.Interfaces;
+using Domain.Entities;
+using Domain.Models.Creates;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
+using Domain.Models.Updates;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Common.Extensions;
-using AutoMapper.QueryableExtensions;
-using Common.Errors;
-using Domain.Entities;
-using Domain.Models.Creates;
-using Domain.Models.Updates;
 
 namespace Application.Services.Implementations
 {

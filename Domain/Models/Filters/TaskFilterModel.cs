@@ -4,6 +4,7 @@
     {
         public string? Title { get; set; }
         public Guid? ManagerId { get; set; }
+        public Guid? StaffId { get; set; }
         public string? Status { get; set; }
     }
 }
