@@ -52,7 +52,6 @@ namespace Data
         // get FoodReport Repository
         public IFoodReportRepository FoodReport { get; }
 
-
         void BeginTransaction();
         void Commit();
         void Rollback();
