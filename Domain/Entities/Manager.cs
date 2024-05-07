@@ -19,7 +19,6 @@ namespace Domain.Entities
         public string? Phone { get; set; }
         public string Password { get; set; } = null!;
         public string Status { get; set; } = null!;
-        public string? DeviceToken { get; set; }
         public DateTime CreateAt { get; set; }
 
         public virtual Farm? Farm { get; set; }

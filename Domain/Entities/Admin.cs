@@ -16,7 +16,6 @@ namespace Domain.Entities
         public string? AvatarUrl { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public string? DeviceToken { get; set; }
         public DateTime CreateAt { get; set; }
 
         public virtual ICollection<DeviceToken> DeviceTokens { get; set; }
