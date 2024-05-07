@@ -31,9 +31,9 @@ namespace Application.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> GetUserNotifications(Guid userId, PaginationRequestModel pagination)
+        public async Task<IActionResult> GetAdminNotifications(Guid adminId, PaginationRequestModel pagination)
         {
-            var query = _notificationRepository.Where(notification => notification.UserId.Equals(userId));
+            var query = _notificationRepository.Where(notification => notification.AdminId.Equals(adminId));
             var notifications = await query.AsNoTracking()
                 .OrderByDescending(notification => notification.CreateAt)
                 .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
@@ -43,9 +43,21 @@ namespace Application.Services.Implementations
             return notifications.ToPaged(pagination, totalRow).Ok();
         }
 
-        public async Task<IActionResult> GetAdminNotifications(Guid adminId, PaginationRequestModel pagination)
+        public async Task<IActionResult> GetManagerNotifications(Guid managerId, PaginationRequestModel pagination)
         {
-            var query = _notificationRepository.Where(notification => notification.AdminId.Equals(adminId));
+            var query = _notificationRepository.Where(notification => notification.ManagerId.Equals(managerId));
+            var notifications = await query.AsNoTracking()
+                .OrderByDescending(notification => notification.CreateAt)
+                .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
+                .Paginate(pagination)
+                .ToListAsync();
+            var totalRow = query.Count();
+            return notifications.ToPaged(pagination, totalRow).Ok();
+        }
+
+        public async Task<IActionResult> GetStaffNotifications(Guid staffId, PaginationRequestModel pagination)
+        {
+            var query = _notificationRepository.Where(notification => notification.StaffId.Equals(staffId));
             var notifications = await query.AsNoTracking()
                 .OrderByDescending(notification => notification.CreateAt)
                 .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
@@ -87,9 +99,9 @@ namespace Application.Services.Implementations
             return AppErrors.UPDATE_FAILED.UnprocessableEntity();
         }
 
-        public async Task<IActionResult> UserMarkAsRead(Guid userId)
+        public async Task<IActionResult> ManagerMarkAsRead(Guid managerId)
         {
-            var notifications = await _notificationRepository.Where(notification => notification.UserId.Equals(userId)).ToListAsync();
+            var notifications = await _notificationRepository.Where(notification => notification.ManagerId.Equals(managerId)).ToListAsync();
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;
@@ -103,6 +115,19 @@ namespace Application.Services.Implementations
         public async Task<IActionResult> AdminMarkAsRead(Guid adminId)
         {
             var notifications = await _notificationRepository.Where(notification => notification.AdminId.Equals(adminId)).ToListAsync();
+            foreach (var notification in notifications)
+            {
+                notification.IsRead = true;
+            }
+            _notificationRepository.UpdateRange(notifications);
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            return notifications.Ok();
+        }
+
+        public async Task<IActionResult> StaffMarkAsRead(Guid staffId)
+        {
+            var notifications = await _notificationRepository.Where(notification => notification.StaffId.Equals(staffId)).ToListAsync();
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;
@@ -150,15 +175,15 @@ namespace Application.Services.Implementations
             }
         }
 
-        public async Task SendNotificationForUsers(ICollection<Guid> userIds, NotificationCreateModel model)
+        public async Task SendNotificationForStaffs(ICollection<Guid> staffIds, NotificationCreateModel model)
         {
-            var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.UserId != null
-                && userIds.Contains(dvt.UserId.Value))
+            var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.StaffId != null
+                && staffIds.Contains(dvt.StaffId.Value))
                 .Select(dvt => dvt.Token).ToListAsync();
-            foreach (var userId in userIds)
+            foreach (var staffId in staffIds)
             {
                 var notification = _mapper.Map<Notification>(model);
-                notification.UserId = userId;
+                notification.StaffId = staffId;
                 _notificationRepository.Add(notification);
             }
             var result = await _unitOfWork.SaveChangesAsync();
@@ -205,6 +230,52 @@ namespace Application.Services.Implementations
             {
                 var notification = _mapper.Map<Notification>(model);
                 notification.AdminId = adminId;
+                _notificationRepository.Add(notification);
+            }
+            var result = await _unitOfWork.SaveChangesAsync();
+            if (result > 0)
+            {
+                if (deviceTokens.Any())
+                {
+                    var messageData = new Dictionary<string, string>{
+                            { "type", model.Type ?? "" },
+                            { "link", model.Link ?? "" },
+                            { "createAt", DateTime.Now.ToString() },
+                            { "isRead", false.ToString() },
+                        };
+                    var message = new MulticastMessage()
+                    {
+                        Notification = new FirebaseAdmin.Messaging.Notification
+                        {
+                            Title = model.Title,
+                            Body = model.Body,
+                        },
+                        Data = messageData,
+                        Tokens = deviceTokens
+                    };
+                    var app = FirebaseApp.DefaultInstance;
+                    if (FirebaseApp.DefaultInstance == null)
+                    {
+                        app = FirebaseApp.Create(new AppOptions()
+                        {
+                            Credential = GoogleCredential.FromFile("firebase-adminsdk.json")
+                        });
+                    }
+                    FirebaseMessaging messaging = FirebaseMessaging.GetMessaging(app);
+                    await messaging.SendMulticastAsync(message);
+                }
+            }
+        }
+
+        public async Task SendNotificationForManagers(ICollection<Guid> managerIds, NotificationCreateModel model)
+        {
+            var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.ManagerId != null
+                && managerIds.Contains(dvt.ManagerId.Value))
+                .Select(dvt => dvt.Token).ToListAsync();
+            foreach (var managerId in managerIds)
+            {
+                var notification = _mapper.Map<Notification>(model);
+                notification.ManagerId = managerId;
                 _notificationRepository.Add(notification);
             }
             var result = await _unitOfWork.SaveChangesAsync();

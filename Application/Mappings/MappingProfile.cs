@@ -54,7 +54,8 @@ namespace Application.Mappings
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Cage
-            CreateMap<Cage, CageViewModel>();
+            CreateMap<Cage, CageViewModel>()
+                .ForMember(dest => dest.NumberOfBird, opt => opt.MapFrom(src => src.Birds.Count));
             CreateMap<CageCreateModel, Cage>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
