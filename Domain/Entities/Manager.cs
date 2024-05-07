@@ -7,6 +7,8 @@ namespace Domain.Entities
     {
         public Manager()
         {
+            DeviceTokens = new HashSet<DeviceToken>();
+            Notifications = new HashSet<Notification>();
             Tasks = new HashSet<Task>();
         }
 
@@ -21,6 +23,8 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
 
         public virtual Farm? Farm { get; set; }
+        public virtual ICollection<DeviceToken> DeviceTokens { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Task> Tasks { get; set; }
     }
 }

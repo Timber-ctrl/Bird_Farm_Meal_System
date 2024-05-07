@@ -46,6 +46,10 @@ namespace Application.Services.Implementations
             {
                 var manager = await _managerRepository.Where(ma => ma.Id.Equals(id))
                     .FirstOrDefaultAsync();
+                if (manager == null)
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
                 var authModel = _mapper.Map<AuthModel>(manager);
                 authModel.Role = UserRoles.MANAGER;
                 var accessToken = _authService.GenerateJwtToken(authModel);

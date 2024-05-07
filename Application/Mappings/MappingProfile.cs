@@ -273,6 +273,13 @@ namespace Application.Mappings
                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
             CreateMap<FoodReportUpdateModel, FoodReport>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+            // Notification
+            CreateMap<Notification, NotificationViewModel>()
+               .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Body));
+            CreateMap<NotificationCreateModel, Notification>()
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+               .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => false));
         }
     }
 }

@@ -8,7 +8,9 @@ namespace Domain.Entities
         public Staff()
         {
             AssignStaffs = new HashSet<AssignStaff>();
+            DeviceTokens = new HashSet<DeviceToken>();
             FoodReports = new HashSet<FoodReport>();
+            Notifications = new HashSet<Notification>();
             TaskCheckLists = new HashSet<TaskCheckList>();
             TicketAssignees = new HashSet<Ticket>();
             TicketCreators = new HashSet<Ticket>();
@@ -27,7 +29,9 @@ namespace Domain.Entities
 
         public virtual Farm Farm { get; set; } = null!;
         public virtual ICollection<AssignStaff> AssignStaffs { get; set; }
+        public virtual ICollection<DeviceToken> DeviceTokens { get; set; }
         public virtual ICollection<FoodReport> FoodReports { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<TaskCheckList> TaskCheckLists { get; set; }
         public virtual ICollection<Ticket> TicketAssignees { get; set; }
         public virtual ICollection<Ticket> TicketCreators { get; set; }

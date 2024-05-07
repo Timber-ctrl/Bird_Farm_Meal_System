@@ -27,6 +27,8 @@ namespace Data
         public IFoodCategoryRepository _foodCategory = null!;
         public IBirdCategoryRepository _birdCategory = null!;
         public IAssignStaffRepository _assignStaff = null!;
+        public INotificationRepository _notification = null!;
+        public IDeviceTokenRepository _deviceToken = null!;
         public IUnitOfMeasurementRepository _unitOfMeasurement = null!;
         //Admin
         public IAdminRepository _admin = null!;
@@ -121,6 +123,16 @@ namespace Data
         public IAssignStaffRepository AssignStaff
         {
             get { return _assignStaff ??= new AssignStaffRepository(_context); }
+        }
+
+        public INotificationRepository Notification
+        {
+            get { return _notification ??= new NotificationRepository(_context); }
+        }
+
+        public IDeviceTokenRepository DeviceToken
+        {
+            get { return _deviceToken ??= new DeviceTokenRepository(_context); }
         }
 
         public IUnitOfMeasurementRepository UnitOfMeasurement

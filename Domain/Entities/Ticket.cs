@@ -15,9 +15,9 @@ namespace Domain.Entities
         public string Description { get; set; } = null!;
         public string Image { get; set; } = null!;
         public string Status { get; set; } = null!;
-        public string? ResultDescription { get; set; }
-        public string? ResultImage { get; set; }
         public DateTime CreateAt { get; set; }
+        public string? ResultImage { get; set; }
+        public string? ResultDescription { get; set; }
 
         public virtual Staff? Assignee { get; set; }
         public virtual Cage? Cage { get; set; }

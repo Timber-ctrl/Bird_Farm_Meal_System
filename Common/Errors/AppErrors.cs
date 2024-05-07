@@ -11,6 +11,6 @@
         public const string MANAGER_HAS_FARM = "This manager already manages the farm";
 
         public const string DUPLICATE_MEAL_ITEM= "The meal item already has this food";
-
+        public const string DEVICE_TOKEN_EXIST = "Device token already exists";
     }
 }

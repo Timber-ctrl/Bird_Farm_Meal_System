@@ -31,6 +31,8 @@ namespace Infrastructure.Configurations
             services.AddScoped<IUnitOfMeasurementService, UnitOfMeasurementService>();
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ITaskCheckListService, TaskCheckListService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IDeviceTokenService, DeviceTokenService>();
             // day bi loi
             services.AddScoped<ITaskCheckListReportService, TaskCheckListReportService>();
             services.AddScoped<ITaskCheckListReportItemService, TaskCheckListReportItemService>();

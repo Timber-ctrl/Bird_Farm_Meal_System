@@ -18,8 +18,8 @@ namespace Domain.Entities
         public Guid ManagerId { get; set; }
         public DateTime Deadline { get; set; }
         public DateTime StartAt { get; set; }
-        public DateTime CreateAt { get; set; }
         public double WorkingHours { get; set; }
+        public DateTime CreateAt { get; set; }
         public string Status { get; set; } = null!;
 
         public virtual Manager Manager { get; set; } = null!;

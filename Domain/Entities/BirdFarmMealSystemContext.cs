@@ -25,6 +25,7 @@ namespace Domain.Entities
         public virtual DbSet<Cage> Cages { get; set; } = null!;
         public virtual DbSet<CareMode> CareModes { get; set; } = null!;
         public virtual DbSet<Counter> Counters { get; set; } = null!;
+        public virtual DbSet<DeviceToken> DeviceTokens { get; set; } = null!;
         public virtual DbSet<Farm> Farms { get; set; } = null!;
         public virtual DbSet<Food> Foods { get; set; } = null!;
         public virtual DbSet<FoodCategory> FoodCategories { get; set; } = null!;
@@ -41,6 +42,7 @@ namespace Domain.Entities
         public virtual DbSet<MenuMeal> MenuMeals { get; set; } = null!;
         public virtual DbSet<MenuMealSample> MenuMealSamples { get; set; } = null!;
         public virtual DbSet<MenuSammple> MenuSammples { get; set; } = null!;
+        public virtual DbSet<Notification> Notifications { get; set; } = null!;
         public virtual DbSet<Plan> Plans { get; set; } = null!;
         public virtual DbSet<Repeat> Repeats { get; set; } = null!;
         public virtual DbSet<Schema> Schemas { get; set; } = null!;
@@ -57,15 +59,6 @@ namespace Domain.Entities
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<UnitOfMeasurement> UnitOfMeasurements { get; set; } = null!;
         public virtual DbSet<Staff> Staff { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=database.monoinfinity.net;Database=BirdFarmMealSystem;Persist Security Info=False;User ID=sa;Password=1234567890Aa;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -254,6 +247,32 @@ namespace Domain.Entities
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.ExpireAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<DeviceToken>(entity =>
+            {
+                entity.ToTable("DeviceToken");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreateAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Admin)
+                    .WithMany(p => p.DeviceTokens)
+                    .HasForeignKey(d => d.AdminId)
+                    .HasConstraintName("FK__DeviceTok__Admin__6F7F8B4B");
+
+                entity.HasOne(d => d.Manager)
+                    .WithMany(p => p.DeviceTokens)
+                    .HasForeignKey(d => d.ManagerId)
+                    .HasConstraintName("FK__DeviceTok__Manag__7073AF84");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.DeviceTokens)
+                    .HasForeignKey(d => d.StaffId)
+                    .HasConstraintName("FK__DeviceTok__Staff__6E8B6712");
             });
 
             modelBuilder.Entity<Farm>(entity =>
@@ -564,6 +583,38 @@ namespace Domain.Entities
                     .HasForeignKey(d => d.SpeciesId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__MenuSammp__Speci__5AEE82B9");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.ToTable("Notification");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreateAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Link).HasMaxLength(256);
+
+                entity.Property(e => e.Title).HasMaxLength(256);
+
+                entity.Property(e => e.Type).HasMaxLength(256);
+
+                entity.HasOne(d => d.Admin)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.AdminId)
+                    .HasConstraintName("FK__Notificat__Admin__68D28DBC");
+
+                entity.HasOne(d => d.Manager)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.ManagerId)
+                    .HasConstraintName("FK__Notificat__Manag__69C6B1F5");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.Notifications)
+                    .HasForeignKey(d => d.StaffId)
+                    .HasConstraintName("FK__Notificat__Staff__67DE6983");
             });
 
             modelBuilder.Entity<Plan>(entity =>

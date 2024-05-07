@@ -16,6 +16,8 @@ namespace Data
         public IFoodCategoryRepository FoodCategory { get; }
         public IBirdCategoryRepository BirdCategory { get; }
         public IAssignStaffRepository AssignStaff { get; }
+        public INotificationRepository Notification { get; }
+        public IDeviceTokenRepository DeviceToken { get; }
         public IUnitOfMeasurementRepository UnitOfMeasurement { get; }
         //get Admin Repository
         public IAdminRepository Admin { get; }
