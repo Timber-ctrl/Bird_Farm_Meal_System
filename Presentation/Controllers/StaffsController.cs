@@ -51,6 +51,20 @@ namespace Presentation.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("registrations")]
+        public async Task<IActionResult> RegisterStaff([FromBody] StaffRegistrationModel model)
+        {
+            try
+            {
+                return await _staffService.CreateStaff(model);
+            }
+            catch (Exception e)
+            {
+                return e.Message.InternalServerError();
+            }
+        }
+
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateStaff([FromRoute] Guid id, [FromForm] StaffUpdateModel model)
