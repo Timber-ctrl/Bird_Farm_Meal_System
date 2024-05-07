@@ -3,6 +3,7 @@ using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
 using Domain.Models.Authentications;
+using Domain.Models.Updates;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +47,20 @@ namespace Presentation.Controllers
             catch (Exception e)
             {
                 return e.Message.InternalServerError();
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateManager([FromRoute] Guid id, [FromForm] ManagerUpdateModel model)
+        {
+            try
+            {
+                return await _managerService.UpdateManager(id, model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

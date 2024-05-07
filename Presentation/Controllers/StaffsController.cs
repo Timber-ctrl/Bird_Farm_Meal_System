@@ -5,6 +5,7 @@ using Domain.Constants;
 using Domain.Models.Authentications;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
+using Domain.Models.Updates;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,17 +51,17 @@ namespace Presentation.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("registrations")]
-        public async Task<IActionResult> RegisterStaff([FromBody] StaffRegistrationModel model)
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateStaff([FromRoute] Guid id, [FromForm] StaffUpdateModel model)
         {
             try
             {
-                return await _staffService.CreateStaff(model);
+                return await _staffService.UpdateStaff(id, model);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return e.Message.InternalServerError();
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

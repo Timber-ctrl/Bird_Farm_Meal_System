@@ -1,6 +1,5 @@
 ﻿using Application.Services.Interfaces;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
@@ -8,8 +7,7 @@ using Data.Repositories.Interfaces;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Authentications;
-using Domain.Models.Views;
-using Hangfire.Dashboard;
+using Domain.Models.Updates;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,10 +17,13 @@ namespace Application.Services.Implementations
     {
         private readonly IManagerRepository _managerRepository;
         private readonly IAuthService _authService;
-        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper, IAuthService authService) : base(unitOfWork, mapper)
+        private readonly ICloudStorageService _cloudStorageService;
+
+        public ManagerService(IUnitOfWork unitOfWork, IMapper mapper, IAuthService authService, ICloudStorageService cloudStorageService) : base(unitOfWork, mapper)
         {
             _managerRepository = unitOfWork.Manager;
             _authService = authService;
+            _cloudStorageService = cloudStorageService;
         }
 
         private async Task<Manager> GetManager(Guid id)
@@ -127,6 +128,30 @@ namespace Application.Services.Implementations
                     }
                 };
                 return response.Created();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> UpdateManager(Guid id, ManagerUpdateModel model)
+        {
+            try
+            {
+                var manager = await _managerRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                if (manager == null)
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                if (model.Avatar != null)
+                {
+                    manager.AvatarUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Avatar);
+                }
+                _mapper.Map(model, manager);
+                _managerRepository.Update(manager);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? await GetManagerInformation(manager.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
             {

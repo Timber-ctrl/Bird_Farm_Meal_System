@@ -10,6 +10,7 @@ using Domain.Entities;
 using Domain.Models.Authentications;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
+using Domain.Models.Updates;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,9 +20,11 @@ namespace Application.Services.Implementations
     public class StaffService : BaseService, IStaffService
     {
         private readonly IStaffRepository _staffRepository;
-        public StaffService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly ICloudStorageService _cloudStorageService;
+        public StaffService(IUnitOfWork unitOfWork, IMapper mapper, ICloudStorageService cloudStorageService) : base(unitOfWork, mapper)
         {
             _staffRepository = unitOfWork.Staff;
+            _cloudStorageService = cloudStorageService;
         }
 
         public async Task<IActionResult> GetStaffs(StaffFilterModel filter, PaginationRequestModel pagination)
@@ -103,6 +106,30 @@ namespace Application.Services.Implementations
                 // Return created Staff
                 var createdStaff = await GetStaff(staff.Id);
                 return _mapper.Map<StaffViewModel>(createdStaff).Created();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> UpdateStaff(Guid id, StaffUpdateModel model)
+        {
+            try
+            {
+                var staff = await _staffRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                if (staff == null)
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                if (model.Avatar != null)
+                {
+                    staff.AvatarUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Avatar);
+                }
+                _mapper.Map(model, staff);
+                _staffRepository.Update(staff);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? await GetStaffInformation(staff.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
             {
