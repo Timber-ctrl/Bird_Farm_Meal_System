@@ -14,18 +14,23 @@ using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
-using System.Linq;
+using Domain.Constants;
+using Hangfire.Server;
 
 namespace Application.Services.Implementations
 {
     public class TaskService : BaseService, ITaskService
     {
         private readonly ITaskRepository _taskRepository;
-        private readonly IAssignStaffRepository _assignStaff;
-        public TaskService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly IAssignStaffRepository _assignStaffRepository;
+        private readonly IManagerRepository _managerRepository;
+        private readonly INotificationService _notificationService;
+        public TaskService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService) : base(unitOfWork, mapper)
         {
             _taskRepository = unitOfWork.Task;
-            _assignStaff = unitOfWork.AssignStaff;
+            _assignStaffRepository = unitOfWork.AssignStaff;
+            _managerRepository = unitOfWork.Manager;
+            _notificationService = notificationService;
         }
         public async Task<IActionResult> GetTasks(TaskFilterModel filter, PaginationRequestModel pagination)
         {
@@ -130,7 +135,7 @@ namespace Application.Services.Implementations
             try
             {
                 var assignStaff = _mapper.Map<AssignStaff>(model);
-                _assignStaff.Add(assignStaff);
+                _assignStaffRepository.Add(assignStaff);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetTask(assignStaff.TaskId) : AppErrors.CREATE_FAILED.BadRequest();
             }
@@ -144,8 +149,8 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var assignStaff = await _assignStaff.FirstOrDefaultAsync(at => at.TaskId.Equals(taskId) && at.StaffId.Equals(staffId));
-                _assignStaff.Remove(assignStaff);
+                var assignStaff = await _assignStaffRepository.FirstOrDefaultAsync(at => at.TaskId.Equals(taskId) && at.StaffId.Equals(staffId));
+                _assignStaffRepository.Remove(assignStaff);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? new NoContentResult() : AppErrors.CREATE_FAILED.BadRequest();
             }
@@ -167,7 +172,38 @@ namespace Application.Services.Implementations
                 _mapper.Map(model, task);
                 _taskRepository.Update(task);
                 var result = await _unitOfWork.SaveChangesAsync();
+                if (model.Status != null) {
+                    await TaskStatusNotifyForManager(task.Id, model.Status);
+                }
                 return result > 0 ? await GetTask(task.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async System.Threading.Tasks.Task TaskStatusNotifyForManager(Guid taskId, string status)
+        {
+            try
+            {
+                var task = await _taskRepository.Where(ta => ta.Id.Equals(taskId)).FirstOrDefaultAsync();
+                if (task == null)
+                {
+                    return;
+                }
+                var notification = new NotificationCreateModel
+                {
+                    Title = "Task status changed",
+                    Body = $"{task.Title} has changed status to {status}",
+                    Type = NotificationTypes.TASK,
+                    Link = task.Id.ToString(),
+                };
+                var managerIds = new List<Guid>()
+                {
+                    task.ManagerId,
+                };
+                await _notificationService.SendNotificationForManagers(managerIds, notification);
             }
             catch (Exception)
             {

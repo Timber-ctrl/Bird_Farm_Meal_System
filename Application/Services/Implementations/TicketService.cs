@@ -4,7 +4,9 @@ using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
+using Data.Repositories.Implementations;
 using Data.Repositories.Interfaces;
+using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Creates;
 using Domain.Models.Filters;
@@ -20,10 +22,14 @@ namespace Application.Services.Implementations
     {
         private readonly ITicketRepository _ticketRepository;
         private readonly ICloudStorageService _cloudStorageService;
-        public TicketService(IUnitOfWork unitOfWork, IMapper mapper, ICloudStorageService cloudStorageService) : base(unitOfWork, mapper)
+        private readonly INotificationService _notificationService;
+
+        public TicketService(IUnitOfWork unitOfWork, IMapper mapper, 
+            ICloudStorageService cloudStorageService, INotificationService notificationService) : base(unitOfWork, mapper)
         {
             _ticketRepository = unitOfWork.Ticket;
             _cloudStorageService = cloudStorageService;
+            _notificationService = notificationService;
         }
         public async Task<IActionResult> GetTickets(TicketFilterModel filter, PaginationRequestModel pagination)
         {
@@ -122,7 +128,39 @@ namespace Application.Services.Implementations
                 }
                 _ticketRepository.Update(ticket);
                 var result = await _unitOfWork.SaveChangesAsync();
+                if (model.Status != null)
+                {
+                    await TicketStatusNotifyForManager(ticket.Id, model.Status);
+                }
                 return result > 0 ? await GetTicket(ticket.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private async System.Threading.Tasks.Task TicketStatusNotifyForManager(Guid ticketId, string status)
+        {
+            try
+            {
+                var ticket = await _ticketRepository.Where(ta => ta.Id.Equals(ticketId)).FirstOrDefaultAsync();
+                if (ticket == null)
+                {
+                    return;
+                }
+                var notification = new NotificationCreateModel
+                {
+                    Title = "Ticket status changed",
+                    Body = $"{ticket.Title} has changed status to {status}",
+                    Type = NotificationTypes.TICKET,
+                    Link = ticket.Id.ToString(),
+                };
+                var managerIds = new List<Guid>()
+                {
+                    ticket.CreatorId,
+                };
+                await _notificationService.SendNotificationForManagers(managerIds, notification);
             }
             catch (Exception)
             {
