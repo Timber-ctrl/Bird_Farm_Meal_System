@@ -3,6 +3,8 @@ using Application.Services.Interfaces;
 using Common.Extensions;
 using Domain.Constants;
 using Domain.Models.Authentications;
+using Domain.Models.Filters;
+using Domain.Models.Pagination;
 using Domain.Models.Updates;
 using Infrastructure.Configurations;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,20 @@ namespace Presentation.Controllers
         public ManagersController(IManagerService managerService)
         {
             _managerService = managerService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetManagers([FromQuery] ManagerFilterModel filter, [FromQuery] PaginationRequestModel pagination)
+        {
+            try
+            {
+                var auth = this.GetAuthenticatedUser();
+                return await _managerService.GetManagers(filter, pagination);
+            }
+            catch (Exception e)
+            {
+                return e.Message.InternalServerError();
+            }
         }
 
         [HttpGet]

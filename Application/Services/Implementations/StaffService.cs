@@ -122,6 +122,11 @@ namespace Application.Services.Implementations
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
+                // Return 409 if phone number conflict
+                if (model.Phone != null && IsPhoneNumberExists(model.Phone))
+                {
+                    return AppErrors.DUPLICATE_PHONE.Conflict();
+                }
                 if (model.Avatar != null)
                 {
                     staff.AvatarUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Avatar);

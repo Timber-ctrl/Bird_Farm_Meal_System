@@ -1,13 +1,18 @@
 ﻿using Application.Services.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
+using Data.Repositories.Implementations;
 using Data.Repositories.Interfaces;
 using Domain.Constants;
 using Domain.Entities;
 using Domain.Models.Authentications;
+using Domain.Models.Filters;
+using Domain.Models.Pagination;
 using Domain.Models.Updates;
+using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +29,31 @@ namespace Application.Services.Implementations
             _managerRepository = unitOfWork.Manager;
             _authService = authService;
             _cloudStorageService = cloudStorageService;
+        }
+        public async Task<IActionResult> GetManagers(ManagerFilterModel filter, PaginationRequestModel pagination)
+        {
+            try
+            {
+                var query = _managerRepository.GetAll();
+                if (filter.Name != null)
+                {
+                    query = query.Where(cg => cg.Name.Contains(filter.Name));
+                }
+                if (filter.Status != null)
+                {
+                    query = query.Where(cg => cg.Status.Contains(filter.Status));
+                }
+                var totalRows = query.Count();
+                var managers = await query.AsNoTracking()
+                    .Paginate(pagination)
+                    .ProjectTo<ManagerViewModel>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                return managers.ToPaged(pagination, totalRows).Ok();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async Task<Manager> GetManager(Guid id)
