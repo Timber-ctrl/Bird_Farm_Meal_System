@@ -42,6 +42,10 @@ namespace Application.Services.Implementations
                 if (filter.CageId != null)
                 {
                     query = query.Where(cg => cg.CageId.Equals(filter.CageId));
+                }      
+                if (filter.SpeciesId != null)
+                {
+                    query = query.Where(cg => cg.SpeciesId.Equals(filter.SpeciesId));
                 }
                 var totalRows = query.Count();
                 var birds = await query.AsNoTracking()
