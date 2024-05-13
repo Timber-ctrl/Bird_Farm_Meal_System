@@ -128,10 +128,10 @@ namespace Application.Services.Implementations
                 }
                 _ticketRepository.Update(ticket);
                 var result = await _unitOfWork.SaveChangesAsync();
-                if (model.Status != null)
-                {
-                    await TicketStatusNotifyForManager(ticket.Id, model.Status);
-                }
+                //if (model.Status != null)
+                //{
+                //    await TicketStatusNotifyForManager(ticket.Id, model.Status);
+                //}
                 return result > 0 ? await GetTicket(ticket.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
