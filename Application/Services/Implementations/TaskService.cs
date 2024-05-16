@@ -178,6 +178,7 @@ namespace Application.Services.Implementations
                 var result = await _unitOfWork.SaveChangesAsync();
                 if (model.Status != null) {
                     await TaskStatusNotifyForManager(task.Id, model.Status);
+                    await TaskStatusNotifyForStaff(task.Id, model.Status);
                 }
                 return result > 0 ? await GetTask(task.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
