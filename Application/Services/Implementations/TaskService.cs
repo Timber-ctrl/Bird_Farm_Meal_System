@@ -220,7 +220,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var task = await _taskRepository.Where(ta => ta.Id.Equals(taskId)).FirstOrDefaultAsync();
+                var task = await _taskRepository.Where(ta => ta.Id.Equals(taskId)).Include(x => x.AssignStaffs).FirstOrDefaultAsync();
                 if (task == null)
                 {
                     return;
@@ -233,7 +233,7 @@ namespace Application.Services.Implementations
                     Link = task.Id.ToString(),
                 };
                 var staffIds = task.AssignStaffs.Select(x => x.StaffId).ToList();
-                await _notificationService.SendNotificationForManagers(staffIds, notification);
+                await _notificationService.SendNotificationForStaffs(staffIds, notification);
             }
             catch (Exception)
             {
