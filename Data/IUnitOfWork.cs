@@ -53,6 +53,7 @@ namespace Data
         public ITicketRepository Ticket { get; }
         // get FoodReport Repository
         public IFoodReportRepository FoodReport { get; }
+        public IPlanDetailRepository PlanDetail { get; }
 
         void BeginTransaction();
         void Commit();

@@ -44,6 +44,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Status.Contains(filter.Status));
                 }
+                if (filter.FarmId != null)
+                {
+                    query = query.Where(cg => cg.Creator.FarmId.Equals(filter.FarmId));
+                }
 
                 var totalRows = query.Count();
                 var tickets = await query.AsNoTracking()
@@ -72,6 +76,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         private async Task<IActionResult> GetCreatedTicket(Guid id)
         {
             try
@@ -86,6 +91,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> CreateTicket(TicketCreateModel model)
         {
             try
@@ -104,6 +110,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> UpdateTicket(Guid id, TicketUpdateModel model)
         {
             try

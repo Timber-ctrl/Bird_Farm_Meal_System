@@ -6,5 +6,6 @@
         public Guid? CategoryId { get; set; }
         public Guid? CageId { get; set; }
         public Guid? SpeciesId { get; set; }
+        public Guid? FarmId { get; set; }
     }
 }

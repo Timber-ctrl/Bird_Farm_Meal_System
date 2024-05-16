@@ -10,7 +10,9 @@ namespace Application.Services.Interfaces
     {
         Task<IActionResult> GetPlans(PlanFilterModel filter, PaginationRequestModel pagination);
         Task<IActionResult> GetPlan(Guid id);
+        Task<IActionResult> GetPlanDetail(Guid id);
         Task<IActionResult> CreatePlan(PlanCreateModel model);
         Task<IActionResult> UpdatePlan(Guid id, PlanUpdateModel model);
+        Task<IActionResult> UpdatePlanDetail(Guid id, PlanDetailUpdateModel model);
     }
 }

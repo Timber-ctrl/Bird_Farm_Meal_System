@@ -46,6 +46,20 @@ namespace Presentation.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("details/{id}")]
+        public async Task<IActionResult> GetPlanDetail([FromRoute] Guid id)
+        {
+            try
+            {
+                return await _planService.GetPlanDetail(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePlan([FromBody] PlanCreateModel model)
         {
@@ -66,6 +80,20 @@ namespace Presentation.Controllers
             try
             {
                 return await _planService.UpdatePlan(id, model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("details/{id}")]
+        public async Task<IActionResult> UpdatePlanDetail([FromRoute] Guid id, [FromBody] PlanDetailUpdateModel model)
+        {
+            try
+            {
+                return await _planService.UpdatePlanDetail(id, model);
             }
             catch (Exception ex)
             {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Models.Views
+﻿namespace Domain.Models.Views
 {
     public class PlanViewModel
     {
@@ -14,6 +8,7 @@ namespace Domain.Models.Views
         public DateTime To { get; set; }
         public MenuViewModel Menu { get; set; } = null!;
         public CageViewModel Cage { get; set; } = null!;
+        public ICollection<PlanDetailViewModel> PlanDetails { get; set; } = new List<PlanDetailViewModel>();
         public DateTime CreateAt { get; set; }
     }
 }

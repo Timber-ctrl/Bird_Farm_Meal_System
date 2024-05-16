@@ -21,6 +21,7 @@ namespace Domain.Entities
         public string Status { get; set; } = null!;
         public DateTime CreateAt { get; set; }
 
+        public virtual Farm IdNavigation { get; set; } = null!;
         public virtual Farm? Farm { get; set; }
         public virtual ICollection<DeviceToken> DeviceTokens { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }

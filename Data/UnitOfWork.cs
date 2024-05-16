@@ -64,6 +64,7 @@ namespace Data
         public ITicketRepository _ticket = null!;
         //FoodReport
         public IFoodReportRepository _foodReport = null!;
+        public IPlanDetailRepository _planDetail = null!;
 
         public IStaffRepository Staff
         {
@@ -237,6 +238,10 @@ namespace Data
         public IFoodReportRepository FoodReport
         {
             get { return _foodReport ??= new FoodReportRepository(_context); }
+        }
+        public IPlanDetailRepository PlanDetail
+        {
+            get { return _planDetail ??= new PlanDetailRepository(_context); }
         }
 
         public void BeginTransaction()

@@ -1,33 +1,30 @@
 ﻿using Application.Services.Interfaces;
 using AutoMapper;
-using Data.Repositories.Interfaces;
+using AutoMapper.QueryableExtensions;
+using Common.Errors;
+using Common.Extensions;
+using Common.Helpers;
 using Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Data.Repositories.Implementations;
+using Data.Repositories.Interfaces;
+using Domain.Entities;
+using Domain.Models.Creates;
 using Domain.Models.Filters;
 using Domain.Models.Pagination;
+using Domain.Models.Updates;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Common.Extensions;
-using AutoMapper.QueryableExtensions;
-using Common.Errors;
-using Domain.Entities;
-using Domain.Models.Creates;
-using Domain.Models.Updates;
 
 namespace Application.Services.Implementations
 {
     public class PlanService : BaseService , IPlanService
     {
         private readonly IPlanRepository _planRepository;
+        private readonly IPlanDetailRepository _planDetailRepository;
         public PlanService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
             _planRepository = unitOfWork.Plan;
+            _planDetailRepository = unitOfWork.PlanDetail;
         }
         public async Task<IActionResult> GetPlans(PlanFilterModel filter, PaginationRequestModel pagination)
         {
@@ -70,6 +67,22 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
+        public async Task<IActionResult> GetPlanDetail(Guid id)
+        {
+            try
+            {
+                var planDetail = await _planDetailRepository.Where(cg => cg.Id.Equals(id)).AsNoTracking()
+                    .ProjectTo<PlanDetailViewModel>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync() ?? null!;
+                return planDetail != null ? planDetail.Ok() : AppErrors.NOT_FOUND.NotFound();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         private async Task<IActionResult> GetCreatedPlan(Guid id)
         {
             try
@@ -89,6 +102,7 @@ namespace Application.Services.Implementations
             try
             {
                 var plan = _mapper.Map<Plan>(model);
+                plan.PlanDetails = PlanHelper.GeneratePlanDetail(plan);
                 _planRepository.Add(plan);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetCreatedPlan(plan.Id) : AppErrors.CREATE_FAILED.BadRequest();
@@ -111,6 +125,26 @@ namespace Application.Services.Implementations
                 _planRepository.Update(plan);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetPlan(plan.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IActionResult> UpdatePlanDetail(Guid id, PlanDetailUpdateModel model)
+        {
+            try
+            {
+                var planDetail = await _planDetailRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                if (planDetail == null)
+                {
+                    return AppErrors.NOT_FOUND.NotFound();
+                }
+                _mapper.Map(model, planDetail);
+                _planDetailRepository.Update(planDetail);
+                var result = await _unitOfWork.SaveChangesAsync();
+                return result > 0 ? await GetPlanDetail(planDetail.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
             {

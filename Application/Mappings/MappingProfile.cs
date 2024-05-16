@@ -285,6 +285,11 @@ namespace Application.Mappings
             CreateMap<NotificationCreateModel, Notification>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
                .ForMember(dest => dest.IsRead, opt => opt.MapFrom(src => false));
+
+            // PlanDetail
+            CreateMap<PlanDetail, PlanDetailViewModel>();
+            CreateMap<PlanDetailUpdateModel, PlanDetail>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

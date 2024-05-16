@@ -53,6 +53,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.ManagerId.Equals(filter.ManagerId));
                 }
+                if (filter.FarmId != null)
+                {
+                    query = query.Where(cg => cg.Manager.Farm != null && cg.Manager.Farm.Id.Equals(filter.FarmId));
+                }
                 var totalRow = query.Count();
                 var task = await query.AsNoTracking()
                     .Paginate(pagination)

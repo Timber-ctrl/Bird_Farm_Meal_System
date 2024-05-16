@@ -44,6 +44,7 @@ namespace Domain.Entities
         public virtual DbSet<MenuSammple> MenuSammples { get; set; } = null!;
         public virtual DbSet<Notification> Notifications { get; set; } = null!;
         public virtual DbSet<Plan> Plans { get; set; } = null!;
+        public virtual DbSet<PlanDetail> PlanDetails { get; set; } = null!;
         public virtual DbSet<Repeat> Repeats { get; set; } = null!;
         public virtual DbSet<Schema> Schemas { get; set; } = null!;
         public virtual DbSet<Server> Servers { get; set; } = null!;
@@ -462,6 +463,13 @@ namespace Domain.Entities
                 entity.Property(e => e.Phone).HasMaxLength(256);
 
                 entity.Property(e => e.Status).HasMaxLength(256);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ManagerNavigation)
+                    .HasPrincipalKey<Farm>(p => p.ManagerId)
+                    .HasForeignKey<Manager>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Manager_Farm");
             });
 
             modelBuilder.Entity<MealItem>(entity =>
@@ -643,6 +651,21 @@ namespace Domain.Entities
                     .WithMany(p => p.Plans)
                     .HasForeignKey(d => d.MenuId)
                     .HasConstraintName("FK__Plan__MenuId__73BA3083");
+            });
+
+            modelBuilder.Entity<PlanDetail>(entity =>
+            {
+                entity.ToTable("PlanDetail");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Plan)
+                    .WithMany(p => p.PlanDetails)
+                    .HasForeignKey(d => d.PlanId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PlanDetai__PlanI__753864A1");
             });
 
             modelBuilder.Entity<Repeat>(entity =>
