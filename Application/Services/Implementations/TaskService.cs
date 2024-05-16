@@ -214,5 +214,30 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
+        private async System.Threading.Tasks.Task TaskStatusNotifyForStaff(Guid taskId, string status)
+        {
+            try
+            {
+                var task = await _taskRepository.Where(ta => ta.Id.Equals(taskId)).FirstOrDefaultAsync();
+                if (task == null)
+                {
+                    return;
+                }
+                var notification = new NotificationCreateModel
+                {
+                    Title = "Task status changed",
+                    Body = $"{task.Title} has changed status to {status}",
+                    Type = NotificationTypes.TASK,
+                    Link = task.Id.ToString(),
+                };
+                var staffIds = task.AssignStaffs.Select(x => x.StaffId).ToList();
+                await _notificationService.SendNotificationForManagers(staffIds, notification);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
