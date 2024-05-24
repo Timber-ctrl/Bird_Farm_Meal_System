@@ -36,10 +36,16 @@ namespace Application.Services.Implementations
                     query = query.Where(cg => cg.Name.Contains(filter.Name));
                 }
                 var totalRows = query.Count();
+
+                // Tra ve danh sach farm kem voi phân trang
                 var farms = await query.AsNoTracking()
+                    // Phân trang danh sách farm
                     .Paginate(pagination)
+                    // Dùng mapper để map đối tượng khi thực hiện câu query
                     .ProjectTo<FarmViewModel>(_mapper.ConfigurationProvider)
+                    // Thực hiện câu query để lấy về danh sách farm
                     .ToListAsync();
+
                 return farms.ToPaged(pagination, totalRows).Ok();
             }
             catch (Exception)
@@ -105,17 +111,27 @@ namespace Application.Services.Implementations
         {
             try
             {
+                // Dau tien truyen vao FarmId cua Farm ma minh muon Update
+
+                // Lay Farm tu database bang FarmId (id)
                 var farm = await _farmRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+
                 if (farm == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
+
                 if (model.Thumbnail != null)
                 {
                     farm.ThumbnailUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Thumbnail);
                 }
+                // Map du lieu tu FarmUpdateModel sang Farm de update xuong database
                 _mapper.Map(model, farm);
+
+                // Tuong tu cau len Update trong SQL
                 _farmRepository.Update(farm);
+
+                // Luu thay doi xuong Database tra ve so dong da duoc thay doi
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetFarm(farm.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }

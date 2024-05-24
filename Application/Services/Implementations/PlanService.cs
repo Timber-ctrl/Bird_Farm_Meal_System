@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Implementations
 {
-    public class PlanService : BaseService , IPlanService
+    public class PlanService : BaseService, IPlanService
     {
         private readonly IPlanRepository _planRepository;
         private readonly IPlanDetailRepository _planDetailRepository;
@@ -31,7 +31,7 @@ namespace Application.Services.Implementations
             try
             {
                 var query = _planRepository.GetAll();
-                
+
                 if (filter.MenuId != null)
                 {
                     query = query.Where(cg => cg.MenuId.Equals(filter.MenuId));
@@ -53,6 +53,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> GetPlan(Guid id)
         {
             try
@@ -97,6 +98,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> CreatePlan(PlanCreateModel model)
         {
             try
@@ -112,6 +114,7 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+
         public async Task<IActionResult> UpdatePlan(Guid id, PlanUpdateModel model)
         {
             try
@@ -120,6 +123,18 @@ namespace Application.Services.Implementations
                 if (plan == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
+                }
+                if (model.From != null && model.To != null)
+                {
+                    if (plan.From != model.From || plan.To != model.To)
+                    {
+                        var planDetails = await _planDetailRepository.Where(x => x.PlanId.Equals(id)).ToListAsync();
+                        _planDetailRepository.RemoveRange(planDetails);
+                        await _unitOfWork.SaveChangesAsync();
+                        plan.From = (DateTime)model.From;
+                        plan.To = (DateTime)model.To;
+                        plan.PlanDetails = PlanHelper.GeneratePlanDetail(plan);
+                    }
                 }
                 _mapper.Map(model, plan);
                 _planRepository.Update(plan);

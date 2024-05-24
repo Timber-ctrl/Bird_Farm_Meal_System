@@ -4,7 +4,6 @@ using AutoMapper.QueryableExtensions;
 using Common.Errors;
 using Common.Extensions;
 using Data;
-using Data.Repositories.Implementations;
 using Data.Repositories.Interfaces;
 using Domain.Constants;
 using Domain.Entities;
@@ -30,6 +29,7 @@ namespace Application.Services.Implementations
             _authService = authService;
             _cloudStorageService = cloudStorageService;
         }
+
         public async Task<IActionResult> GetManagers(ManagerFilterModel filter, PaginationRequestModel pagination)
         {
             try

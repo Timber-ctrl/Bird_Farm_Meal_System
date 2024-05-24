@@ -1,4 +1,4 @@
-using Application.Mappings;
+﻿using Application.Mappings;
 using Application.Settings;
 using Domain.Entities;
 using Hangfire;
@@ -9,12 +9,18 @@ using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var allowSpecificOrigins = "_allowSpecificOrigins";
-var sqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+
+// Lấy chuỗi kết nối
+var sqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Kết nối với Database
 builder.Services.AddDbContext<BirdFarmMealSystemContext>(options =>
         options.UseSqlServer(sqlConnectionString));
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddHangfire(configuration => configuration
