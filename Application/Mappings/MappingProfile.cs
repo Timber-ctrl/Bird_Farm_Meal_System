@@ -31,6 +31,9 @@ namespace Application.Mappings
             CreateMap<StaffUpdateModel, Staff>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
+            // Admin
+            CreateMap<Admin, AuthModel>().ReverseMap();
+       
             // Manager
             CreateMap<Manager, AuthModel>().ReverseMap();
             CreateMap<Manager, ManagerViewModel>();

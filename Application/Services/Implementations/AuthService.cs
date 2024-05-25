@@ -23,11 +23,13 @@ namespace Application.Services.Implementations
     public class AuthService : BaseService, IAuthService
     {
         private readonly IStaffRepository _staffRepository;
+        private readonly IAdminRepository _adminRepository;
         private readonly AppSettings _appSettings;
         private readonly IManagerRepository _managerRepository;
         public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IOptions<AppSettings> appSettings) : base(unitOfWork, mapper)
         {
             _appSettings = appSettings.Value;
+            _adminRepository = unitOfWork.Admin;
             _staffRepository = unitOfWork.Staff;
             _managerRepository = unitOfWork.Manager;
         }
@@ -86,6 +88,36 @@ namespace Application.Services.Implementations
                 throw;
             }
         }
+        public async Task<IActionResult> AdminAuthenticate(CertificateModel certificate)
+        {
+            try
+            {
+                // Find manager with email and password
+                if (_adminRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
+                {
+                    var user = await _adminRepository.FirstOrDefaultAsync(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password));
+                    var admin = _mapper.Map<AuthModel>(user);
+                    admin!.Role = UserRoles.ADMIN;
+                    var accessToken = GenerateJwtToken(admin);
+
+                    var tmp = GetAdminData(user);
+                    var response = new AuthResponseModel()
+                    {
+                        Access_token = accessToken,
+                        User = tmp,
+                    };
+
+                    return response.Ok();
+                }
+
+                // Return 400 if not found
+                return AppErrors.INVALID_CERTIFICATE.BadRequest();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public async Task<AuthModel> GetUser(Guid id)
         {
@@ -111,6 +143,17 @@ namespace Application.Services.Implementations
                         .FirstOrDefaultAsync();
                     manager!.Role = UserRoles.MANAGER;
                     return manager;
+                }
+
+                // Find admin in manager table
+                if (_adminRepository.Any(st => st.Id.Equals(id)))
+                {
+                    var admin = await _adminRepository
+                        .Where(st => st.Id.Equals(id))
+                        .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
+                        .FirstOrDefaultAsync();
+                    admin!.Role = UserRoles.ADMIN;
+                    return admin;
                 }
 
                 // Return null if not found any user
@@ -151,6 +194,20 @@ namespace Application.Services.Implementations
                     PhotoURL = user.AvatarUrl,
                     Email = user.Email,
                     Phone = user.Phone,
+                }
+            };
+        }
+        public UserDataModel GetAdminData(Admin user)
+        {
+            return new UserDataModel()
+            {
+                Uuid = user.Id,
+                Role = UserRoles.ADMIN,
+                Data = new InfoManager()
+                {
+                    DisplayName = user.Name,
+                    PhotoURL = user.AvatarUrl,
+                    Email = user.Email,
                 }
             };
         }

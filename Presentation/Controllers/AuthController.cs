@@ -43,5 +43,19 @@ namespace Presentation.Controllers
                 return e.Message.InternalServerError();
             }
         }
+
+        [HttpPost]
+        [Route("admins")]
+        public async Task<IActionResult> AdminAuthenticate([FromBody] CertificateModel certificate)
+        {
+            try
+            {
+                return await _authService.AdminAuthenticate(certificate);
+            }
+            catch (Exception e)
+            {
+                return e.Message.InternalServerError();
+            }
+        }
     }
 }
