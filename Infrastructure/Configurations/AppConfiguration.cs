@@ -17,6 +17,7 @@ namespace Infrastructure.Configurations
             services.AddScoped<ICloudStorageService, CloudStorageService>();
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAdminServices, AdminServices>();
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IManagerService, ManagerService>();
             services.AddScoped<ICageService, CageService>();
