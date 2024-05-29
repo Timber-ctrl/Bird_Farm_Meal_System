@@ -54,7 +54,7 @@ builder.Services.AddSwagger();
 builder.Services.AddDependenceInjection();
 builder.Services.AddFirebase();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddHangfireServer();
+//builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -64,9 +64,9 @@ app.UseCors(allowSpecificOrigins);
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHangfireDashboard("/hangfire");
+//app.UseHangfireDashboard("/hangfire");
 
-app.UseHangfireService();
+//app.UseHangfireService();
 
 app.UseHttpsRedirection();
 
