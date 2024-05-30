@@ -19,9 +19,12 @@ namespace Application.Services.Implementations
     public class BirdCategoryService : BaseService, IBirdCategoryService
     {
         private readonly IBirdCategoryRepository _birdCategoryRepository;
-        public BirdCategoryService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
+        private readonly ICloudStorageService _cloudStorageService;
+
+        public BirdCategoryService(IUnitOfWork unitOfWork, IMapper mapper, ICloudStorageService cloudStorageService) : base(unitOfWork, mapper)
         {
             _birdCategoryRepository = unitOfWork.BirdCategory;
+            _cloudStorageService = cloudStorageService;
         }
 
         public async Task<IActionResult> GetBirdCategories(BirdCategoryFilterModel filter, PaginationRequestModel pagination)
@@ -81,6 +84,10 @@ namespace Application.Services.Implementations
             try
             {
                 var birdCategory = _mapper.Map<BirdCategory>(model);
+                if (model.Thumbnail != null)
+                {
+                    birdCategory.ThumbnailUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Thumbnail);
+                }
                 _birdCategoryRepository.Add(birdCategory);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? await GetCreatedBirdCategory(birdCategory.Id) : AppErrors.CREATE_FAILED.BadRequest();
