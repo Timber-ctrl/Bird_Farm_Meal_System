@@ -136,6 +136,10 @@ namespace Application.Services.Implementations
                 {
                     ticket.AssigneeId = null;
                 }
+                if (model.ResultDescription == "null")
+                {
+                    ticket.ResultDescription = null;
+                }
                 _ticketRepository.Update(ticket);
                 var result = await _unitOfWork.SaveChangesAsync();
                 if (model.Status != null)
