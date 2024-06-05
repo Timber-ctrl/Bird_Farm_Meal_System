@@ -35,6 +35,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Code.Contains(filter.Code));
                 }
+                if (filter.FarmId != null)
+                {
+                    query = query.Where(cg => cg.Area.FarmId.Equals(filter.FarmId));
+                }
                 var totalRows = query.Count();
                 var cages = await query.AsNoTracking()
                     .Paginate(pagination)
