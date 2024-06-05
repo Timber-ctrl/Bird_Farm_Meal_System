@@ -31,6 +31,20 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Route("GetByMealPlan")]
+        public async Task<IActionResult> GetFoodsByMealPlan([FromQuery] FoodFilterModel filter, [FromQuery] PaginationRequestModel pagination)
+        {
+            try
+            {
+                return await _foodService.GetFoodsByMealPlan(filter, pagination);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetFood([FromRoute] Guid id)
         {

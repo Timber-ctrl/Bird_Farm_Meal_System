@@ -107,6 +107,10 @@ namespace Application.Services.Implementations
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
+                if (model.Thumbnail != null)
+                {
+                    birdCategory.ThumbnailUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Thumbnail);
+                }
                 _mapper.Map(model, birdCategory);
                 _birdCategoryRepository.Update(birdCategory);
                 var result = await _unitOfWork.SaveChangesAsync();

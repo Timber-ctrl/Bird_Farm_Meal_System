@@ -33,7 +33,7 @@ namespace Application.Mappings
 
             // Admin
             CreateMap<Admin, AuthModel>().ReverseMap();
-       
+
             // Manager
             CreateMap<Manager, AuthModel>().ReverseMap();
             CreateMap<Manager, ManagerViewModel>();
@@ -114,6 +114,7 @@ namespace Application.Mappings
             CreateMap<BirdCategory, BirdCategoryViewModel>();
             CreateMap<BirdCategoryCreateModel, BirdCategory>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.ThumbnailUrl, opt => opt.MapFrom(src => src.Thumbnail))
                 .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(src => DateTimeHelper.VnNow));
             CreateMap<BirdCategoryUpdateModel, BirdCategory>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
