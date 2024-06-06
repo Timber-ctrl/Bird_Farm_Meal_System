@@ -55,9 +55,9 @@ namespace Application.Services.Implementations
             return notifications.ToPaged(pagination, totalRow).Ok();
         }
 
-        public async Task<IActionResult> GetStaffNotifications(Guid staffId, PaginationRequestModel pagination)
+        public async Task<IActionResult> GetStaffNotifications(Guid StaffId, PaginationRequestModel pagination)
         {
-            var query = _notificationRepository.Where(notification => notification.StaffId.Equals(staffId));
+            var query = _notificationRepository.Where(notification => notification.StaffId.Equals(StaffId));
             var notifications = await query.AsNoTracking()
                 .OrderByDescending(notification => notification.CreateAt)
                 .ProjectTo<NotificationViewModel>(_mapper.ConfigurationProvider)
@@ -125,9 +125,9 @@ namespace Application.Services.Implementations
             return notifications.Ok();
         }
 
-        public async Task<IActionResult> StaffMarkAsRead(Guid staffId)
+        public async Task<IActionResult> StaffMarkAsRead(Guid StaffId)
         {
-            var notifications = await _notificationRepository.Where(notification => notification.StaffId.Equals(staffId)).ToListAsync();
+            var notifications = await _notificationRepository.Where(notification => notification.StaffId.Equals(StaffId)).ToListAsync();
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;
@@ -175,15 +175,15 @@ namespace Application.Services.Implementations
             }
         }
 
-        public async Task SendNotificationForStaffs(ICollection<Guid> staffIds, NotificationCreateModel model)
+        public async Task SendNotificationForStaffs(ICollection<Guid> StaffIds, NotificationCreateModel model)
         {
             var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.StaffId != null
-                && staffIds.Contains(dvt.StaffId.Value))
+                && StaffIds.Contains(dvt.StaffId.Value))
                 .Select(dvt => dvt.Token).ToListAsync();
-            foreach (var staffId in staffIds)
+            foreach (var StaffId in StaffIds)
             {
                 var notification = _mapper.Map<Notification>(model);
-                notification.StaffId = staffId;
+                notification.StaffId = StaffId;
                 _notificationRepository.Add(notification);
             }
             var result = await _unitOfWork.SaveChangesAsync();

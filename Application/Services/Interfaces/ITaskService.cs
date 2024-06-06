@@ -13,7 +13,7 @@ namespace Application.Services.Interfaces
         Task<IActionResult> GetStaffTask(Guid id, PaginationRequestModel pagination);
         Task<IActionResult> CreateTask(TaskCreateModel model);
         Task<IActionResult> AssignStaff(AssignStaffCreateModel model);
-        Task<IActionResult> DeleteAssignStaff(Guid taskId, Guid staffId);
+        Task<IActionResult> DeleteAssignStaff(Guid taskId, Guid StaffId);
         Task<IActionResult> UpdateTask(Guid id, TaskUpdateModel model);
     }
 }

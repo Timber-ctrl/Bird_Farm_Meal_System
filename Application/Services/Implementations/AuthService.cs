@@ -22,7 +22,7 @@ namespace Application.Services.Implementations
 {
     public class AuthService : BaseService, IAuthService
     {
-        private readonly IStaffRepository _staffRepository;
+        private readonly IStaffRepository _StaffRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly AppSettings _appSettings;
         private readonly IManagerRepository _managerRepository;
@@ -30,7 +30,7 @@ namespace Application.Services.Implementations
         {
             _appSettings = appSettings.Value;
             _adminRepository = unitOfWork.Admin;
-            _staffRepository = unitOfWork.Staff;
+            _StaffRepository = unitOfWork.Staff;
             _managerRepository = unitOfWork.Manager;
         }
 
@@ -39,13 +39,13 @@ namespace Application.Services.Implementations
             try
             {
                 // Find Staff with email and password
-                if (_staffRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
+                if (_StaffRepository.Any(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password)))
                 {
-                    var staff = await _staffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
+                    var Staff = await _StaffRepository.Where(st => st.Email.Equals(certificate.Email) && st.Password.Equals(certificate.Password))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();
-                    staff!.Role = UserRoles.STAFF;
-                    var accessToken = GenerateJwtToken(staff);
+                    Staff!.Role = UserRoles.STAFF;
+                    var accessToken = GenerateJwtToken(Staff);
                     return new TokenModel { AccessToken = accessToken }.Ok();
                 }
 
@@ -124,9 +124,9 @@ namespace Application.Services.Implementations
             try
             {
                 // Find Staff in Staff table
-                if (_staffRepository.Any(st => st.Id.Equals(id)))
+                if (_StaffRepository.Any(st => st.Id.Equals(id)))
                 {
-                    var Staff = await _staffRepository
+                    var Staff = await _StaffRepository
                         .Where(st => st.Id.Equals(id))
                         .ProjectTo<AuthModel>(_mapper.ConfigurationProvider)
                         .FirstOrDefaultAsync();

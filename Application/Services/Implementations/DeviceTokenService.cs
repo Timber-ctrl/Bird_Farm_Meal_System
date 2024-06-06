@@ -21,9 +21,9 @@ namespace Application.Services.Implementations
             _deviceTokenRepository = unitOfWork.DeviceToken;
         }
 
-        public async Task<IActionResult> CreateStaffDeviceToken(Guid staffId, DeviceTokenCreateModel model)
+        public async Task<IActionResult> CreateStaffDeviceToken(Guid StaffId, DeviceTokenCreateModel model)
         {
-            var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.StaffId.Equals(staffId))
+            var deviceTokens = await _deviceTokenRepository.Where(dvt => dvt.StaffId.Equals(StaffId))
             .ToListAsync();
 
             if (deviceTokens.Any(token => token.Token.Equals(model.DeviceToken)))
@@ -34,7 +34,7 @@ namespace Application.Services.Implementations
             var deviceToken = new DeviceToken
             {
                 Id = Guid.NewGuid(),
-                StaffId = staffId,
+                StaffId = StaffId,
                 CreateAt = DateTimeHelper.VnNow,
                 Token = model.DeviceToken,
             };

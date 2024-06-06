@@ -19,11 +19,11 @@ namespace Application.Services.Implementations
 {
     public class StaffService : BaseService, IStaffService
     {
-        private readonly IStaffRepository _staffRepository;
+        private readonly IStaffRepository _StaffRepository;
         private readonly ICloudStorageService _cloudStorageService;
         public StaffService(IUnitOfWork unitOfWork, IMapper mapper, ICloudStorageService cloudStorageService) : base(unitOfWork, mapper)
         {
-            _staffRepository = unitOfWork.Staff;
+            _StaffRepository = unitOfWork.Staff;
             _cloudStorageService = cloudStorageService;
         }
 
@@ -31,7 +31,7 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var query = _staffRepository.GetAll();
+                var query = _StaffRepository.GetAll();
                 if (filter.Name != null)
                 {
                     query = query.Where(cg => cg.Name.Contains(filter.Name));
@@ -57,9 +57,9 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
+                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
                     .FirstOrDefaultAsync();
-                return staff != null ? staff : null!;
+                return Staff != null ? Staff : null!;
             }
             catch (Exception)
             {
@@ -71,10 +71,10 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var staff = await _staffRepository.Where(st => st.Id.Equals(id))
+                var Staff = await _StaffRepository.Where(st => st.Id.Equals(id))
                     .ProjectTo<StaffViewModel>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync();
-                return staff != null ? staff.Ok() : AppErrors.NOT_FOUND.NotFound();
+                return Staff != null ? Staff.Ok() : AppErrors.NOT_FOUND.NotFound();
             }
             catch (Exception)
             {
@@ -99,12 +99,12 @@ namespace Application.Services.Implementations
                 }
 
                 // Create new Staff
-                var staff = _mapper.Map<Staff>(model);
-                _staffRepository.Add(staff);
+                var Staff = _mapper.Map<Staff>(model);
+                _StaffRepository.Add(Staff);
                 await _unitOfWork.SaveChangesAsync();
 
                 // Return created Staff
-                var createdStaff = await GetStaff(staff.Id);
+                var createdStaff = await GetStaff(Staff.Id);
                 return _mapper.Map<StaffViewModel>(createdStaff).Created();
             }
             catch (Exception)
@@ -117,8 +117,8 @@ namespace Application.Services.Implementations
         {
             try
             {
-                var staff = await _staffRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
-                if (staff == null)
+                var Staff = await _StaffRepository.FirstOrDefaultAsync(cg => cg.Id.Equals(id));
+                if (Staff == null)
                 {
                     return AppErrors.NOT_FOUND.NotFound();
                 }
@@ -129,12 +129,12 @@ namespace Application.Services.Implementations
                 }
                 if (model.Avatar != null)
                 {
-                    staff.AvatarUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Avatar);
+                    Staff.AvatarUrl = await _cloudStorageService.Upload(Guid.NewGuid(), model.Avatar);
                 }
-                _mapper.Map(model, staff);
-                _staffRepository.Update(staff);
+                _mapper.Map(model, Staff);
+                _StaffRepository.Update(Staff);
                 var result = await _unitOfWork.SaveChangesAsync();
-                return result > 0 ? await GetStaffInformation(staff.Id) : AppErrors.UPDATE_FAILED.BadRequest();
+                return result > 0 ? await GetStaffInformation(Staff.Id) : AppErrors.UPDATE_FAILED.BadRequest();
             }
             catch (Exception)
             {
@@ -144,12 +144,12 @@ namespace Application.Services.Implementations
 
         private bool IsEmailExists(string email)
         {
-            return _staffRepository.Any(st => st.Email.Equals(email));
+            return _StaffRepository.Any(st => st.Email.Equals(email));
         }
 
         private bool IsPhoneNumberExists(string phone)
         {
-            return _staffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
+            return _StaffRepository.Any(st => st.Phone != null && st.Phone.Equals(phone));
         }
     }
 }

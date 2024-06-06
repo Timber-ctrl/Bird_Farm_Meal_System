@@ -48,7 +48,10 @@ namespace Application.Services.Implementations
                 {
                     query = query.Where(cg => cg.Creator.FarmId.Equals(filter.FarmId));
                 }
-
+                if (filter.ManagerId != null)
+                {
+                    query = query.Where(cg => cg.Cage != null && cg.Cage.Area.Farm.ManagerId.Equals(filter.FarmId));
+                }
                 var totalRows = query.Count();
                 var tickets = await query.AsNoTracking()
                     .Paginate(pagination)

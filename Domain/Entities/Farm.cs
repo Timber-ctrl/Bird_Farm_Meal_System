@@ -8,6 +8,7 @@ namespace Domain.Entities
         public Farm()
         {
             Areas = new HashSet<Area>();
+            Foods = new HashSet<Food>();
             Staff = new HashSet<Staff>();
         }
 
@@ -20,8 +21,8 @@ namespace Domain.Entities
         public DateTime CreateAt { get; set; }
 
         public virtual Manager Manager { get; set; } = null!;
-        public virtual Manager? ManagerNavigation { get; set; }
         public virtual ICollection<Area> Areas { get; set; }
+        public virtual ICollection<Food> Foods { get; set; }
         public virtual ICollection<Staff> Staff { get; set; }
     }
 }

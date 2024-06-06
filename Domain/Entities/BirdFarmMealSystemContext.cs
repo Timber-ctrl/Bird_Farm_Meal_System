@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities
 {
@@ -463,13 +460,6 @@ namespace Domain.Entities
                 entity.Property(e => e.Phone).HasMaxLength(256);
 
                 entity.Property(e => e.Status).HasMaxLength(256);
-
-                entity.HasOne(d => d.IdNavigation)
-                    .WithOne(p => p.ManagerNavigation)
-                    .HasPrincipalKey<Farm>(p => p.ManagerId)
-                    .HasForeignKey<Manager>(d => d.Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Manager_Farm");
             });
 
             modelBuilder.Entity<MealItem>(entity =>

@@ -13,8 +13,6 @@ using Domain.Models.Updates;
 using Domain.Models.Views;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Services.Implementations
 {
@@ -44,6 +42,10 @@ namespace Application.Services.Implementations
                 if (filter.Status != null)
                 {
                     query = query.Where(cg => cg.Status.Contains(filter.Status));
+                }
+                if (filter.FarmId != null)
+                {
+                    query = query.Where(cg => cg.FarmId.Equals(filter.FarmId));
                 }
                 var totalRows = query.Count();
                 var foods = await query.AsNoTracking()

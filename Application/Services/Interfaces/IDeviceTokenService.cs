@@ -5,7 +5,7 @@ namespace Application.Services.Interfaces
 {
     public interface IDeviceTokenService
     {
-        Task<IActionResult> CreateStaffDeviceToken(Guid staffId, DeviceTokenCreateModel model);
+        Task<IActionResult> CreateStaffDeviceToken(Guid StaffId, DeviceTokenCreateModel model);
         Task<IActionResult> CreateAdminDeviceToken(Guid adminId, DeviceTokenCreateModel model);
         Task<IActionResult> CreateManagerDeviceToken(Guid managerId, DeviceTokenCreateModel model);
     }

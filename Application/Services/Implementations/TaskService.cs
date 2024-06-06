@@ -148,11 +148,11 @@ namespace Application.Services.Implementations
             }
         }
 
-        public async Task<IActionResult> DeleteAssignStaff(Guid taskId, Guid staffId)
+        public async Task<IActionResult> DeleteAssignStaff(Guid taskId, Guid StaffId)
         {
             try
             {
-                var assignStaff = await _assignStaffRepository.FirstOrDefaultAsync(at => at.TaskId.Equals(taskId) && at.StaffId.Equals(staffId));
+                var assignStaff = await _assignStaffRepository.FirstOrDefaultAsync(at => at.TaskId.Equals(taskId) && at.StaffId.Equals(StaffId));
                 _assignStaffRepository.Remove(assignStaff);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result > 0 ? new NoContentResult() : AppErrors.CREATE_FAILED.BadRequest();
@@ -231,8 +231,8 @@ namespace Application.Services.Implementations
                     Type = NotificationTypes.TASK,
                     Link = task.Id.ToString(),
                 };
-                var staffIds = task.AssignStaffs.Select(x => x.StaffId).ToList();
-                await _notificationService.SendNotificationForStaffs(staffIds, notification);
+                var StaffIds = task.AssignStaffs.Select(x => x.StaffId).ToList();
+                await _notificationService.SendNotificationForStaffs(StaffIds, notification);
             }
             catch (Exception)
             {

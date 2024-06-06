@@ -7,6 +7,7 @@ namespace Domain.Models.Creates
         public IFormFile Thumbnail { get; set; } = null!;
         public string Name { get; set; } = null!;
         public Guid FoodCategoryId { get; set; }
+        public Guid FarmId { get; set; }
         public double Quantity { get; set; }
         public Guid UnitOfMeasurementId { get; set; }
     }

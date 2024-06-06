@@ -7,5 +7,6 @@ namespace Domain.Models.Filters
         public string? TicketCategory { get; set; }
         public string? Status { get; set; }
         public Guid? FarmId { get; set; }
+        public Guid? ManagerId { get; set; }
     }
 }
